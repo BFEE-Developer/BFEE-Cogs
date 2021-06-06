@@ -83,26 +83,40 @@ class BFEEAdmin(commands.Cog):
         await ctx.send(embed=emb)
         
     async def _lockdown(self, ctx):
-        permissions = discord.Permissions()
-        permissions.update(add_reactions = False)
-        permissions.update(send_messages = False)
+        #permissions = discord.Permissions()
+        #permissions.update(add_reactions = False)
+        #permissions.update(send_messages = False)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
             return await ctx.send("No roles configured")
         else:
             for x in roles:
-                await ctx.guild.get_role(x).edit(reason = None, permissions=permissions)
+                role = ctx.guild.get_role(x)
+                permissions = role.permissions
+                permissions.update(add_reactions = False)
+                permissions.update(send_messages = False)
+                try:
+                    await ctx.guild.get_role(x).edit(reason = "Lockdown", permissions=permissions)
+                except discord.Forbidden:
+                    await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
 
     async def _unlock(self, ctx):
-        permissions = discord.Permissions()
-        permissions.update(add_reactions = True)
-        permissions.update(send_messages = True)
+        #permissions = discord.Permissions()
+        #permissions.update(add_reactions = True)
+        #permissions.update(send_messages = True)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
             return await ctx.send("No roles configured")
         else:
             for x in roles:
-                await ctx.guild.get_role(x).edit(reason = None, permissions=permissions)
+                role = ctx.guild.get_role(x)
+                permissions = role.permissions
+                permissions.update(add_reactions = True)
+                permissions.update(send_messages = True)
+                try:
+                    await ctx.guild.get_role(x).edit(reason = "Lockdown end", permissions=permissions)
+                except discord.Forbidden:
+                    await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
             
     async def _add_block_role(self, guild, role):
         async with self.config.guild(guild).blockroles() as rolelist:
