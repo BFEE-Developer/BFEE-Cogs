@@ -1,16 +1,14 @@
 {
-	"name" : "XPLevel",
+	"name" : "BFEEAdmin",
 	"author": [
 		"OGKaktus #5299"
 	],
-	"description": "Level up and rank users  for their chat activity",
-    "install_msg": "Thanks for installing XPLevel.",
+	"description": "Cog for helping BFEE admins",
+    "install_msg": "Thanks for installing BFEEAdmin.",
 	"requirements": [],
-	"short": "XP Leveling system, like mee6",
+	"short": "BFEE Admin cog",
 	"tags": [
-		"XPLevel",
-        "xp",
-		"rank"
+		"bfee"
 	],
 	"disabled" : false
 }
