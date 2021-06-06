@@ -1,14 +1,7 @@
 import discord
-import aiohttp
-from bs4 import BeautifulSoup
-from typing import Optional
-from random import randint
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
-from .rankcard import RankCard
-from .db import DBUtils
-from .utils import Utils
-from redbot.core.utils import AsyncIter
+
 class BFEEAdmin(commands.Cog):
     
     __author__ = "OGKaktus (OGKaktus#5299)"
