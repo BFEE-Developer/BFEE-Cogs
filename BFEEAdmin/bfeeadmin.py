@@ -12,6 +12,11 @@ class BFEEAdmin(commands.Cog):
         "blockroles": [],
     }
     
+    def __init__(self, bot):
+        self.bot = bot
+        
+        self.config = Config.get_conf(self, identifier=13378427487733784274, force_registration=True)
+        self.config.register_guild(**self.default_guild)
     
     @commands.group()
     @checks.admin()
