@@ -1,0 +1,16 @@
+{
+	"name" : "XPLevel",
+	"author": [
+		"OGKaktus #5299"
+	],
+	"description": "Level up and rank users  for their chat activity",
+    "install_msg": "Thanks for installing XPLevel.",
+	"requirements": [],
+	"short": "XP Leveling system, like mee6",
+	"tags": [
+		"XPLevel",
+        "xp",
+		"rank"
+	],
+	"disabled" : false
+}
