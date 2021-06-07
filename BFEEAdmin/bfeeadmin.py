@@ -18,7 +18,7 @@ class BFEEAdmin(commands.Cog):
         self.config.register_guild(**self.default_guild)
         
     @commands.command(name="lockserver")
-    @checks.mod_or_permissions(manage_messages=True)
+    @checks.admin()
     @commands.guild_only()
     async def _lockserver(self,ctx):
         """Lockdown the server"""
@@ -26,7 +26,7 @@ class BFEEAdmin(commands.Cog):
         await ctx.send("Server is now in LOCKDOWN!.")
         
     @commands.command(name="unlockserver")
-    @checks.mod_or_permissions(manage_messages=True)
+    @checks.admin()
     @commands.guild_only()
     async def _unlockserver(self,ctx):
         """End the lockdown"""
@@ -95,6 +95,7 @@ class BFEEAdmin(commands.Cog):
                 permissions = role.permissions
                 permissions.update(add_reactions = False)
                 permissions.update(send_messages = False)
+                permissions.update(speak = False)
                 try:
                     await ctx.guild.get_role(x).edit(reason = "Lockdown", permissions=permissions)
                 except discord.Forbidden:
@@ -113,6 +114,7 @@ class BFEEAdmin(commands.Cog):
                 permissions = role.permissions
                 permissions.update(add_reactions = True)
                 permissions.update(send_messages = True)
+                permissions.update(speak = True)
                 try:
                     await ctx.guild.get_role(x).edit(reason = "Lockdown end", permissions=permissions)
                 except discord.Forbidden:
