@@ -76,7 +76,7 @@ class BFEEAdmin(commands.Cog):
             try:
                 await ctx.send("Role not in list")
             except:
-                pass:
+                pass
         else:
             await self._del_block_role(ctx.guild, role.id)
             try:
