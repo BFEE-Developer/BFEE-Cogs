@@ -23,7 +23,10 @@ class BFEEAdmin(commands.Cog):
     async def _lockserver(self,ctx):
         """Lockdown the server"""
         await self._lockdown(ctx)
-        await ctx.send("Server is now in LOCKDOWN!.")
+        try:
+            await ctx.send("Server is now in LOCKDOWN!")
+        except:
+            pass
         
     @commands.command(name="unlockserver")
     @checks.admin()
@@ -31,7 +34,10 @@ class BFEEAdmin(commands.Cog):
     async def _unlockserver(self,ctx):
         """End the lockdown"""
         await self._unlock(ctx)
-        await ctx.send("Lockdown has stopped.")
+        try:
+            await ctx.send("Lockdown has stopped.")
+        except:
+            pass
     
     @commands.group()
     @checks.admin()
@@ -49,9 +55,15 @@ class BFEEAdmin(commands.Cog):
             return
         if role.id not in await self._get_block_roles(ctx.guild):
             await self._add_block_role(ctx.guild, role.id)
-            await ctx.send("Role added")
+            try:
+                await ctx.send("Role added")
+            except:
+                pass
         else:
-            await ctx.send("Role already in list")
+            try:
+                await ctx.send("Role already in list")
+            except:
+                pass
             
     @locksettings.command(name="delrole")
     @checks.admin()
@@ -61,10 +73,16 @@ class BFEEAdmin(commands.Cog):
         if role is None:
             return
         if role.id not in await self._get_block_roles(ctx.guild):
-            await ctx.send("Role not in list")
+            try:
+                await ctx.send("Role not in list")
+            except:
+                pass:
         else:
             await self._del_block_role(ctx.guild, role.id)
-            await ctx.send("Role removed")
+            try:
+                await ctx.send("Role removed")
+            except:
+                pass
     
     @locksettings.command(name="listroles")
     @checks.admin()
@@ -76,11 +94,20 @@ class BFEEAdmin(commands.Cog):
         emb.description = "These roles will be affected by the lockdown command."
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
-            return await ctx.send("No roles configured")
+            try:
+                return await ctx.send("No roles configured")
+            except:
+                pass
         emb.add_field(
-            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in roles])
+            name="Roles:", value="\n".join([ctx.guild.get_role(x).name for x in roles])
         )
-        await ctx.send(embed=emb)
+        try:
+            await ctx.send(embed=emb)
+        except discord.Forbidden:
+            try:
+                await ctx.send("I cannot send embeds")
+            except discord.Forbidden:
+                pass
         
     async def _lockdown(self, ctx):
         #permissions = discord.Permissions()
@@ -88,7 +115,10 @@ class BFEEAdmin(commands.Cog):
         #permissions.update(send_messages = False)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
-            return await ctx.send("No roles configured")
+            try:
+                return await ctx.send("No roles configured")
+            except:
+                pass
         else:
             for x in roles:
                 role = ctx.guild.get_role(x)
@@ -99,7 +129,10 @@ class BFEEAdmin(commands.Cog):
                 try:
                     await ctx.guild.get_role(x).edit(reason = "Lockdown", permissions=permissions)
                 except discord.Forbidden:
-                    await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
+                    try:
+                        await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
+                    except:
+                        pass
 
     async def _unlock(self, ctx):
         #permissions = discord.Permissions()
@@ -107,7 +140,10 @@ class BFEEAdmin(commands.Cog):
         #permissions.update(send_messages = True)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
-            return await ctx.send("No roles configured")
+            try:
+                return await ctx.send("No roles configured")
+            except:
+                pass
         else:
             for x in roles:
                 role = ctx.guild.get_role(x)
@@ -118,7 +154,10 @@ class BFEEAdmin(commands.Cog):
                 try:
                     await ctx.guild.get_role(x).edit(reason = "Lockdown end", permissions=permissions)
                 except discord.Forbidden:
-                    await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
+                    try:
+                        await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
+                    except:
+                        pass
             
     async def _add_block_role(self, guild, role):
         async with self.config.guild(guild).blockroles() as rolelist:
