@@ -89,32 +89,32 @@ class BFEEAdmin(commands.Cog):
     @commands.guild_only()
     async def _listroles(self, ctx):
         """Lists roles in lockdown."""
-        #try:
-        #    ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
-        #except:
-        #    pass
-        emb = discord.Embed()
-        emb.title = "List of roles who will be lockdowned."
-        emb.description = "These roles will be affected by the lockdown command."
-        roles = await self._get_block_roles(ctx.guild)
-        if not len(roles):
-            try:
-                return await ctx.send("No roles configured")
-            except:
-                pass
-        emb.add_field(
-            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in roles])
-        )
         try:
-            await ctx.send(embed=emb)
-        except discord.Forbidden:
-            try:
-                try:
-                    ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
-                except:
-                    pass
-            except discord.Forbidden:
-                pass
+            ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
+        except:
+            pass
+        #emb = discord.Embed()
+        #emb.title = "List of roles who will be lockdowned."
+        #emb.description = "These roles will be affected by the lockdown command."
+        #roles = await self._get_block_roles(ctx.guild)
+        #if not len(roles):
+        #    try:
+        #        return await ctx.send("No roles configured")
+        #    except:
+        #        pass
+        #emb.add_field(
+        #    name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in roles])
+        #)
+        #try:
+        #    await ctx.send(embed=emb)
+        #except discord.Forbidden:
+        #    try:
+        #        try:
+        #            ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
+        #        except:
+        #            pass
+        #    except discord.Forbidden:
+        #        pass
         
     async def _lockdown(self, ctx):
         #permissions = discord.Permissions()
