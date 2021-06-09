@@ -35,7 +35,7 @@ class BFEEAdmin(commands.Cog):
         """End the lockdown"""
         await self._unlock(ctx)
         try:
-            await ctx.send("Lockdown has stopped.")
+            await ctx.send("Lockdown has ended.")
         except:
             pass
     
@@ -89,6 +89,10 @@ class BFEEAdmin(commands.Cog):
     @commands.guild_only()
     async def _listroles(self, ctx):
         """Lists roles in lockdown."""
+        #try:
+        #    ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
+        #except:
+        #    pass
         emb = discord.Embed()
         emb.title = "List of roles who will be lockdowned."
         emb.description = "These roles will be affected by the lockdown command."
@@ -99,13 +103,16 @@ class BFEEAdmin(commands.Cog):
             except:
                 pass
         emb.add_field(
-            name="Roles:", value="\n".join([ctx.guild.get_role(x).name for x in roles])
+            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in roles])
         )
         try:
             await ctx.send(embed=emb)
         except discord.Forbidden:
             try:
-                await ctx.send("I cannot send embeds")
+                try:
+                    ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
+                except:
+                    pass
             except discord.Forbidden:
                 pass
         
