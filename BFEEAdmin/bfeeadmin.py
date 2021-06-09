@@ -90,10 +90,8 @@ class BFEEAdmin(commands.Cog):
     async def _listroles(self, ctx):
         """Lists roles in lockdown."""
         roles = await self._get_block_roles(ctx.guild)
-        try:
-            await ctx.send("List of roles who will be lockdowned:\n\n".join([ctx.guild.get_role(x).name for x in roles]))
-        except:
-            pass
+        await ctx.send("```\nList of roles who will be lockdowned:\n\n{}\n```".format(join([ctx.guild.get_role(x).name for x in roles])))
+        
         #emb = discord.Embed()
         #emb.title = "List of roles who will be lockdowned."
         #emb.description = "These roles will be affected by the lockdown command."
