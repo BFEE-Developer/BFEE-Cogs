@@ -51,7 +51,7 @@ class BFEEGames(commands.Cog):
             e_color = 0xd0d645
             e_footer = "Wohoo!"
         elif ret.get('ad') is not None:
-            e_desc = "Everyone is dead..\nNone survived..\nThe cleaning crew has started picking up the pieces and are frantically cleaning the trees from blood.\n\nThe BFEE champion will be chosen another day.")
+            e_desc = "Everyone is dead..\nNone survived..\nThe cleaning crew has started picking up the pieces and are frantically cleaning the trees from blood.\n\nThe BFEE champion will be chosen another day."
             e_title = "Its quiet."
             e_color = 0xd0d645
             e_footer = "Sad day for all"
