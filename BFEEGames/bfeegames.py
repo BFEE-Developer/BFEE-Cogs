@@ -38,7 +38,32 @@ class BFEEGames(commands.Cog):
         if not _check_if_gameleader(guild, ctx.author):
             return
         async with self.config.guild(guild).players() as playerlist:
-            playerlist.append(user)        
+            playerlist.append(user)
+            
+    @bfeegames.command(name="step")    
+    @commands.guild_only()
+    async def _step(ctx, *, title: str = None):
+        ret = hg.step()
+        
+        if ret.get('w') is not None:
+            e_desc = "The winner is {0} from district {1}!\nWith a total of {2} kills!".format(ret.get('w').name, ret.get('w').district, ret.get('w').kills)
+            e_title = "We have the BFEE champion!"
+            e_color = 0xd0d645
+            e_footer = "Wohoo!"
+        elif ret.get('ad') is not None:
+            e_desc = "Everyone is dead..\nNone survived..\nThe cleaning crew has started picking up the pieces and are frantically cleaning the trees from blood.\n\nThe BFEE champion will be chosen another day.")
+            e_title = "Its quiet."
+            e_color = 0xd0d645
+            e_footer = "Sad day for all"
+        else:
+            e_desc = ret["messages"]
+            e_title = ret["title"]
+            e_color = 0xd0d645
+            e_footer ret["footer"]       
+            
+        embed = discord.Embed(title=e_title, color=e_color, description=e_desc)
+        embed.set_footer(text=e_footer)
+        await ctx.send(embed=embed)
     
     @bfeegames.command(name="startgame")    
     @commands.guild_only()
