@@ -1,5 +1,5 @@
 import discord
-from game import Game
+from .game import Game
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
 
