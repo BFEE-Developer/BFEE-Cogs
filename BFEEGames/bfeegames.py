@@ -1,146 +1,175 @@
 import discord
-from .game import Game
+import re
+import random
+import math
+import base64
+import copy
+from .gamefw import GameFramework
+from .eventcard import EventCard
+from typing import Optional, Union
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
 
 class BFEEGames(commands.Cog):
     
     __author__ = "OGKaktus (OGKaktus#5299)"
-    __version__ = "1.0"
-    
-    hg = Game()
+    __version__ = "1.3"
     
     default_guild = {
-        "gameleaderrole": "",
-        "players": []
+        "players": [],
+        "gameleaderrole": ""
     }
-      
+    
+    player_obj = {
+        "name": "",
+        "id": "",
+        "district": 0,
+        "alive": True,
+        "kills": 0,
+        "deathcause": "",
+        "avatar": ""
+    }
+    
+    gf = GameFramework()
+    eventcard = EventCard()
+    
     def __init__(self, bot):
         self.bot = bot        
-        self.config = Config.get_conf(self, identifier=13373427487733784274, force_registration=True)
+        self.config = Config.get_conf(
+            self, identifier=133234277487767764274,
+            force_registration=True
+        )
         self.config.register_guild(**self.default_guild)
-        
+        self.eventcard.setBot(bot)
+    
     @commands.group()
     @commands.guild_only()
     async def bfeegames(self, ctx):
         """BFEE games configuration commands."""
         pass
-        
-    @bfeegames.command(name="gameleader")
-    @checks.admin()
-    @commands.guild_only()
-    async def _gameleader(self,ctx, role: discord.Role = None):
-        self.config.guild(guild).gameleaderrole = role
-        
-    @bfeegames.command(name="addplayer")
-    @commands.guild_only()
-    async def _addplayer(self, ctx, user: discord.User = None):
-        if not _check_if_gameleader(guild, ctx.author):
-            return
-        async with self.config.guild(guild).players() as playerlist:
-            playerlist.append(user)
-            
-    @bfeegames.command(name="step")    
-    @commands.guild_only()
-    async def _step(ctx, *, title: str = None):
-        ret = hg.step()
-        
-        if ret.get('w') is not None:
-            e_desc = "The winner is {0} from district {1}!\nWith a total of {2} kills!".format(ret.get('w').name, ret.get('w').district, ret.get('w').kills)
-            e_title = "We have the BFEE champion!"
-            e_color = 0xd0d645
-            e_footer = "Wohoo!"
-        elif ret.get('ad') is not None:
-            e_desc = "Everyone is dead..\nNone survived..\nThe cleaning crew has started picking up the pieces and are frantically cleaning the trees from blood.\n\nThe BFEE champion will be chosen another day."
-            e_title = "Its quiet."
-            e_color = 0xd0d645
-            e_footer = "Sad day for all"
-        else:
-            e_desc = ret["messages"]
-            e_title = ret["title"]
-            e_color = 0xd0d645
-            e_footer ret["footer"]       
-            
-        embed = discord.Embed(title=e_title, color=e_color, description=e_desc)
-        embed.set_footer(text=e_footer)
-        await ctx.send(embed=embed)
     
-    @bfeegames.command(name="startgame")    
+    @bfeegames.command(name="start")
     @commands.guild_only()
-    async def _new(ctx, *, title: str = None):
+    async def _start(self, ctx):
         """
-        Starts a new Hunger Games in the current channel.
-        title - (Optional) The title of the game. Defaults to 'The BFEE Hunger Games'
+        Start a new BFEE Hunger Games
         """
-        if not _check_if_gameleader(guild, ctx.author):
-            return
-        # Check to see if there are enough players.
-        if len(self.config.guild(guild).players()) < 5:
-            await ctx.send("There is not enough players, minimum 5")
-            return
-            
-        if title is None or title == "":
-            title = "The BFEE Hunger Games"
-        else:
-            title = _sanitize_all(ctx.message, title)
         owner = ctx.author
-        ret = hg.new_game(ctx.channel.id, owner.id, owner.name, title)
-        if ret:
-            await ctx.send("There is already a game running")
-        else:
-            hg.start_game(owner, ctx.channel.id, self.config.guild(guild).players())
-            
-    @bfeegames.command(name="addplayer")    
+        ret = self.gf.new_game(ctx.channel.id, owner.id, owner.name)
+        
+        await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
+                   
+        ps = await self.config.guild(ctx.guild).get_raw("players")
+        for x in ps:
+            ret = await self.gf.add_player(ctx.channel.id, str(cog_data_path(self) / "{0}.png".format(x)), ctx.guild.get_member(x))
+        
+        ret = self.gf.start_game(ctx.channel.id, ctx.author.id)
+       
+        embed = discord.Embed(title=ret['title'], description=ret['description'])
+        embed.set_footer(text=ret['footer'])
+        self.lastday = 0
+        await ctx.send(embed=embed)
+        
+    @bfeegames.command(name="listplayers")
     @commands.guild_only()
-    def _add_player(self, channel_id, user: discord):
-        district = math.ceil((len(self.config.guild(guild).players()) + 1) / 2)
-        p = Player(name, district)
-        
-        ret = hg.add_player(ctx.channel.id, name, gender=gender, volunteer=True)
-        
-        if not this_game.add_player(p):
-            return ErrorCode.PLAYER_EXISTS
-        gender_symbol = "♂" if is_male else "♀"
-        if volunteer:
-            return "**District {0} {1} | {2}** volunteers as tribute!".format(p.district, gender_symbol, p.name)
-        return "**District {0} {1} | {2}** is selected to be a tribute!".format(p.district, gender_symbol, p.name)
-        
-    def __strip_mentions(message: discord.Message, text):
-        members = message.mentions
-        channels = message.channel_mentions
-        roles = message.role_mentions
+    async def _listplayers(self, ctx, user: discord.User = None):
+        #if not self._check_if_gameleader(ctx.guild, ctx.author):
+        #    return
+        msg = []
+        ps = await self.config.guild(ctx.guild).get_raw("players")
+        if len(ps) == 0:
+            await ctx.send("There are no players")
+            return
+        for x in ps:
+            msg.append(ctx.guild.get_member(int(x)).mention)
+        await ctx.send("\n".join(msg))
+                
+    @bfeegames.command(name="add")
+    @commands.guild_only()
+    async def _add(self, ctx, user: discord.User = None):
+        """
+        Add a user to the game
+        """
 
-        for m in members:
-            name = m.nick if m.nick is not None else m.name
-            text = re.sub(m.mention, name, text)
-        for c in channels:
-            text = re.sub(c.mention, c.name, text)
-        for r in roles:
-            text = re.sub(r.mention, r.name, text)
-        return text
+        async with self.config.guild(ctx.guild).players() as pl:
+            if user.id in pl:
+                await ctx.send("``{0}`` is already registered".format(user.name))
+                return
+            pl.append(user.id)
+            await self.dl_avatar(ctx, user.id)
+
+        await ctx.send("Added ``{0}`` to BFEE Hunger Games".format(user.name))
     
-    def _sanitize_all(message: discord.Message, text):
-        txt = __strip_mentions(message, text)
-        txt = __sanitize_here_everyone(txt)
-        txt = __sanitize_special_chars(txt)
-        return txt
+    @bfeegames.command(name="wipe")
+    @commands.guild_only()
+    async def _wipe(self,ctx):
+        async with self.config.guild(ctx.guild).players() as pl:
+            for x in pl:
+                pl.remove(x)
+                await ctx.send("Removed ``{0}`` from BFEE Hunger Games".format(ctx.guild.get_member(x).name))
     
-    def __sanitize_here_everyone(text):
-        text = re.sub('@here', '@\u180Ehere', text)
-        text = re.sub('@everyone', '@\u180Eeveryone', text)
-        return text
+    @bfeegames.command(name="remove")
+    @commands.guild_only()
+    async def _remove(self, ctx, user: discord.User = None):
+        """
+        Remove a user from the game
+        """
         
-    def __sanitize_special_chars(text):
-        text = re.sub('@', '\\@', text)
-        text = re.sub('~~', '\\~\\~', text)
-        text = re.sub('\*', '\\*', text)
-        text = re.sub('`', '\\`', text)
-        text = re.sub('_', '\\_', text)
-        return text.strip()
+        async with self.config.guild(ctx.guild).players() as pl:
+            if user.id not in pl:
+                await ctx.send("``{0}`` is not registered".format(user.name))
+                return
+            pl.remove(user.id)
+
+        await ctx.send("Removed ``{0}`` from BFEE Hunger Games".format(user.name))
         
-    def _check_if_gameleader(self, guild, user):
-        if user.guild_permissions.kick_members:
-            return True
-        if self.config.guild(guild).gameleaderrole in user.roles:
-            return True
-        return False
+    @bfeegames.command(name="end")
+    @commands.guild_only()
+    async def end(self, ctx):
+        """
+        Cancels the current game in the channel.
+        """
+        ret = self.gf.end_game(ctx.channel.id, ctx.author.id)
+        await ctx.send("BFEE Hunger Games has been cancelled.")
+
+
+    @commands.command(name="step")
+    @commands.guild_only()
+    async def step(self, ctx):
+        """
+        Steps forward the current game in the channel by one round.
+        """
+        ret = self.gf.step(ctx.channel.id, ctx.author.id)
+       
+        if ret.get('day') is not None:
+            if self.lastday is not ret["day"]:
+                self.lastday = ret["day"]
+                if ret["day"] is 1:
+                    embed = discord.Embed(title="Bloodbath", color=ret['color'], description="Day {0}".format(ret["day"]))
+                else:
+                    embed = discord.Embed(title="Day {0}".format(ret["day"]), color=ret['color'], description="The sun rises")
+                await ctx.send(embed=embed)
+       
+        try:
+            avatars = ret["avatars"]
+            if avatars is None:
+                embed = discord.Embed(title=ret['title'], color=ret['color'], description=ret['description'])
+                if ret['footer'] is not None:
+                    embed.set_footer(text=ret['footer'])
+                await ctx.send(embed=embed)
+                embed = discord.Embed(title="Night {0}".format(ret["day"]), color=ret['color'], description="The sun settles")
+                await ctx.send(embed=embed)
+            else:
+                filen = await self.eventcard.get_card(ctx, ret["description"], avatars)
+                await ctx.send(file=filen)
+        except KeyError:
+            avatars = None
+            embed = discord.Embed(title=ret['title'], color=ret['color'], description=ret['description'])
+            if ret['footer'] is not None:
+                embed.set_footer(text=ret['footer'])
+            await ctx.send(embed=embed)
+        
+    async def dl_avatar(self, ctx, id):
+        if not (cog_data_path(self) / "{0}.png".format(id)).is_file():
+            await ctx.guild.get_member(id).avatar_url.save(cog_data_path(self) / "{0}.png".format(id))
+        return True
