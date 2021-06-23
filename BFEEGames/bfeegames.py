@@ -71,11 +71,21 @@ class BFEEGames(commands.Cog):
     @bfeegames.command(name="gameleader")
     @checks.admin()
     @commands.guild_only()
-    async def _gameleader(self,ctx, role: discord.Role = None):
+    async def _gameleader(self, ctx, role: discord.Role = None):
         """
-        Tell the gme which role is the gameleader role
+        Tell the game which role is the gameleader role
         """
-        self.config.guild(ctx.guild).gameleaderrole = role
+        print("sdgjhsjgh")
+        if role is None:
+            print("isnone")
+            gleader = await self.config.guild(ctx.guild).gameleaderrole()
+            if gleader is "":
+                await ctx.send("There are no role configured")
+            else:
+                await ctx.send("Gameleader role is:\n ``{0}``".format(ctx.guild.get_role(gleader).name))
+            return
+        await self.config.guild(ctx.guild).gameleaderrole.set(role.id)
+        await ctx.send("Added {0}".format(role.name))
     
     @bfeegames.command(name="start")
     @commands.guild_only()
@@ -83,10 +93,15 @@ class BFEEGames(commands.Cog):
         """
         Start a new BFEE Hunger Games
         """
-        owner = ctx.author
-        ret = self.gf.new_game(ctx.channel.id, owner.id, owner.name)
         if not self._check_if_gameleader(ctx.guild, ctx.author):
             return
+        owner = ctx.author
+        ret = self.gf.new_game(ctx.channel.id, owner.id, owner.name)
+        
+        if ret.get('status') is not None:
+            if ret["status"] is "GAMESTARTED":
+                await ctx.send("Game already started by ``{0}``".format(ctx.guild.get_member(ret["owner"]).name))
+                return
         
         await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
                    
@@ -127,8 +142,10 @@ class BFEEGames(commands.Cog):
         """
         Add a user to the game
         """
-        if not self._check_if_gameleader(ctx.guild, ctx.author):
+        if not await self._check_if_gameleader(ctx.guild, ctx.author):
             return
+        if user is None:
+            return await ctx.send_help()
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id in pl:
                 await ctx.send("``{0}`` is already registered".format(user.name))
@@ -146,6 +163,8 @@ class BFEEGames(commands.Cog):
         """
         if not self._check_if_gameleader(ctx.guild, ctx.author):
             return
+        if user is None:
+            return await ctx.send_help()
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id in pl:
                 await self.dl_avatar(ctx, user.id)
@@ -175,6 +194,8 @@ class BFEEGames(commands.Cog):
         """
         if not self._check_if_gameleader(ctx.guild, ctx.author):
             return
+        if user is None:
+            return await ctx.send_help()
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id not in pl:
                 await ctx.send("``{0}`` is not registered".format(user.name))
@@ -204,6 +225,14 @@ class BFEEGames(commands.Cog):
         if not self._check_if_gameleader(ctx.guild, ctx.author):
             return
         ret = self.gf.step(ctx.channel.id, ctx.author.id)
+        
+        if ret.get('status') is not None:
+            if ret["status"] is "NOGAME":
+                await ctx.send("No game is running")
+                return
+            if ret["status"] is "NOTOWNER":
+                await ctx.send("Game already started by ``{0}``".format(ctx.guild.get_member(ret["owner"]).name))
+                return
        
         if ret.get('day') is not None:
             if self.lastday is not ret["day"]:
@@ -238,9 +267,15 @@ class BFEEGames(commands.Cog):
             await ctx.guild.get_member(id).avatar_url.save(cog_data_path(self) / "{0}.png".format(id))
         return True
         
-    def _check_if_gameleader(self, guild, user: discord.User = None):
+    async def _check_if_gameleader(self, guild, user: discord.User = None):
         if user.guild_permissions.kick_members:
+            print("True")
             return True
-        if self.config.guild(guild).gameleaderrole in user.roles:
+        gleader = await self.config.guild(guild).gameleaderrole() 
+        gleader_role = discord.utils.get(guild.roles, id=gleader)
+        print(gleader_role)
+        if gleader_role in user.roles:
+            print("True")
             return True
+        print("False")
         return False 

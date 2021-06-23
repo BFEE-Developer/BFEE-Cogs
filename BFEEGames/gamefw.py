@@ -11,7 +11,7 @@ class GameFramework:
 
     def new_game(self, channel_id, owner_id, owner_name):
         if channel_id in self.active_games:
-            return {"status": "GAMESTARTED"}
+            return {"status": "GAMESTARTED", "owner": this_game.owner_id}
         self.active_games[channel_id] = Game(owner_name, owner_id)
         return True
 
@@ -85,7 +85,7 @@ class GameFramework:
             return {"status": "NOGAME"}
         this_game = self.active_games[channel_id]
         if owner_id != this_game.owner_id:
-            return {"status": "NOTOWNER"}
+            return {"status": "NOTOWNER", "owner": this_game.owner_id}
 
         return self.active_games.pop(channel_id)
 
@@ -97,9 +97,9 @@ class GameFramework:
         this_game = self.active_games[channel_id]
 
         if member_id != this_game.owner_id:
-            return {"status": "NOTOWNER"}
+            return {"status": "NOTOWNER", "owner": this_game.owner_id}
         if not this_game.has_started:
-            return {"status": "GAMENOTSTARTED"}
+            return {"status": "NOGAME"}
 
         if self.cur_summary.get('messages') is None:
             self.cur_summary["messages"] = []
