@@ -48,6 +48,23 @@ class BFEEGames(commands.Cog):
         """BFEE games configuration commands."""
         pass
     
+    @bfeegames.command(name="load")
+    @commands.guild_only()
+    async def _load(self, ctx):
+        """
+        Sets a custom events file to be used
+        You need to attach a file to this command, and it's extension needs to be `.json`.
+        """
+        await ctx.trigger_typing()
+        if not ctx.message.attachments:
+            return await ctx.send_help()
+        file = ctx.message.attachments[0]
+        if not file.filename.lower().endswith(".json"):
+            return await ctx.send("Must be a json file.")
+            
+        await ctx.message.attachments[0].save(str(cog_data_path(self) / "events.json"))
+        await ctx.send("Loaded custom events")
+    
     @bfeegames.command(name="start")
     @commands.guild_only()
     async def _start(self, ctx):

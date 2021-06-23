@@ -1,7 +1,7 @@
 import random
 import math
-from .events import events
-
+import json
+from redbot.core.data_manager import cog_data_path, bundled_data_path
 
 class Game:
     def __init__(self, owner_name, owner_id):
@@ -26,6 +26,19 @@ class Game:
         self.day_passed = False
         self.fallen_passed = False
         self.night_passed = False
+        
+        #See if there is a custom events json file.
+        print("Path 1: {0}".format(cog_data_path(None,"BFEEGames")))
+        print("Path 2: {0}".format(bundled_data_path(self)))
+        if not (cog_data_path(None,"BFEEGames") / "events.json").is_file():
+            print("No custom event file")
+            self.eventsfile = bundled_data_path(self) / "default_events.json"
+        else:
+            self.eventsfile = cog_data_path(None,"BFEEGames") / "events.json"
+            print("Got custom event file")
+            
+        with self.eventsfile.open() as json_data:
+            self.events = json.load(json_data)
         
     def add_player(self, new_player):
         if new_player.name in self.players:
@@ -82,7 +95,7 @@ class Game:
                 messages.append("☠️ {0} | District {1}".format(p, p.district))
         else:
             messages = []
-            event = events[step_type]
+            event = self.events[step_type]
             dead_players_now = len(self.players) - self.total_players_alive
             #messages.append(self.__generate_messages(fatality_factor, event))
             messages = self.__generate_messages(fatality_factor, event)
@@ -120,7 +133,7 @@ class Game:
         
     def __generate_messages(self, fatality_factor, event):
         messages = []##
-        while len(self.players_available_to_act) > 0:##
+        while len(self.players_available_to_act) > 0:
             msg = ""
             isChosen = False
             while not isChosen:
@@ -133,7 +146,7 @@ class Game:
                     ev_type = "fun"
                 
                 try:
-                    action = event[ev_type][tributes]
+                    action = event[ev_type][str(tributes)]
                 except KeyError:
                     continue
                 if len(action) > 0:
