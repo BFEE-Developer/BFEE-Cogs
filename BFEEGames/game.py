@@ -56,6 +56,8 @@ class Game:
             self.night_passed = False
 
         fatality_factor = random.randint(2, 4) + self.consecutive_rounds_without_deaths
+        
+        self.players_available_to_act = {p for p in self.players.values() if p.alive is True}
 
         if self.day is 1 and not self.bloodbath_passed:
             step_type = "bloodbath"
@@ -71,7 +73,7 @@ class Game:
             step_type = "night"
             self.night_passed = True
 
-        self.players_available_to_act = {p for p in self.players.values() if p.alive is True}
+        
 
         event = None
         if step_type is "fallen":
@@ -82,7 +84,8 @@ class Game:
             messages = []
             event = events[step_type]
             dead_players_now = len(self.players) - self.total_players_alive
-            messages.append(self.__generate_messages(fatality_factor, event))
+            #messages.append(self.__generate_messages(fatality_factor, event))
+            messages = self.__generate_messages(fatality_factor, event)
             if len(self.players) - self.total_players_alive == dead_players_now:
                 self.consecutive_rounds_without_deaths += 1
             else:
@@ -116,54 +119,57 @@ class Game:
         return summary
         
     def __generate_messages(self, fatality_factor, event):
-        #messages = []
-        msg = ""
-        isChosen = False
-        while not isChosen:
-            tributes = random.randint(1, len(self.players_available_to_act))
-            f = random.randint(0, 10)
-            ev_type = None
-            if f < fatality_factor and self.total_players_alive > 1:
-                ev_type = "death"
-            else:
-                ev_type = "fun"
-            
-            try:
-                action = event[ev_type][tributes]
-            except KeyError:
-                continue
-            if len(action) > 0:
-                isChosen = True
-            
-        action = random.choice(action)
+        messages = []##
+        while len(self.players_available_to_act) > 0:##
+            msg = ""
+            isChosen = False
+            while not isChosen:
+                tributes = random.randint(1, len(self.players_available_to_act))
+                f = random.randint(0, 10)
+                ev_type = None
+                if f < fatality_factor and self.total_players_alive > 1:
+                    ev_type = "death"
+                else:
+                    ev_type = "fun"
+                
+                try:
+                    action = event[ev_type][tributes]
+                except KeyError:
+                    continue
+                if len(action) > 0:
+                    isChosen = True
+                
+            action = random.choice(action)
 
-        players_acted = 0
-        active_players = []
-        avatars = []
-        
-        while players_acted < tributes:
-            p = random.choice(tuple(self.players_available_to_act))
-            self.players_available_to_act.remove(p)
-            active_players.append(p)
-            players_acted += 1
-            avatars.append(p.avatar)
+            players_acted = 0
+            active_players = []
+            avatars = []
             
-        if ev_type is "death":
-            #print("{0} - {1} | {2}".format(ev_type, action["msg"], len(active_players)))
-            msg = action['msg'].format(*["|>>>|{0}".format(str(i).replace(" ","|--|--|--|")) for i in active_players])
-            if action.get('killed') is not None:
-                if action.get('killer') is not None:
-                    for kr in action['killer']:
-                        active_players[kr].kills += len(action['killed'])
-                for kd in action['killed']:
-                    active_players[kd].alive = False
-                    self.players_dead_today.append(active_players[kd])
-                    self.total_players_alive -= 1
-                    active_players[kd].cause_of_death = msg
-        else:
-            msg = action.format(*["|>>>|{0}".format(str(i).replace(" ","|--|--|--|")) for i in active_players])
-            
-        ret = {"message": msg, "avatars": avatars}
+            while players_acted < tributes:
+                p = random.choice(tuple(self.players_available_to_act))
+                self.players_available_to_act.remove(p)
+                active_players.append(p)
+                players_acted += 1
+                avatars.append(p.avatar)
+                
+            if ev_type is "death":
+                #print("{0} - {1} | {2}".format(ev_type, action["msg"], len(active_players)))
+                msg = action['msg'].format(*["|>>>|{0}".format(str(i).replace(" ","|--|--|--|")) for i in active_players])
+                if action.get('killed') is not None:
+                    if action.get('killer') is not None:
+                        for kr in action['killer']:
+                            active_players[kr].kills += len(action['killed'])
+                    for kd in action['killed']:
+                        active_players[kd].alive = False
+                        self.players_dead_today.append(active_players[kd])
+                        self.total_players_alive -= 1
+                        active_players[kd].cause_of_death = msg
+            else:
+                msg = action.format(*["|>>>|{0}".format(str(i).replace(" ","|--|--|--|")) for i in active_players])
+                
+            ret = {"message": msg, "avatars": avatars}
+            messages.append(ret)##
+        return messages##
         return ret
         
     def __generate_messagesBACKUP(self, fatality_factor, event):

@@ -502,7 +502,7 @@ events = {
                     "killed": [0]
                 },
                 {
-                    "msg": "{0} Asked if there is anything new",
+                    "msg": "{0} Asked if there is anything new and gets banned immediately.",
                     "killer": None,
                     "killed": [0]
                 },

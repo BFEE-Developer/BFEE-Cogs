@@ -60,6 +60,7 @@ class BFEEGames(commands.Cog):
         await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
                    
         ps = await self.config.guild(ctx.guild).get_raw("players")
+        random.shuffle(ps)
         for x in ps:
             ret = await self.gf.add_player(ctx.channel.id, str(cog_data_path(self) / "{0}.png".format(x)), ctx.guild.get_member(x))
         
@@ -73,6 +74,9 @@ class BFEEGames(commands.Cog):
     @bfeegames.command(name="listplayers")
     @commands.guild_only()
     async def _listplayers(self, ctx, user: discord.User = None):
+        """
+        Lists all players participating in BFEE Hunger Games
+        """
         #if not self._check_if_gameleader(ctx.guild, ctx.author):
         #    return
         msg = []
@@ -81,8 +85,10 @@ class BFEEGames(commands.Cog):
             await ctx.send("There are no players")
             return
         for x in ps:
-            msg.append(ctx.guild.get_member(int(x)).mention)
-        await ctx.send("\n".join(msg))
+            msg.append("★ {0}".format(ctx.guild.get_member(int(x)).name))
+        embed = discord.Embed(title="These are our brave souls", description="\n".join(msg))
+        embed.set_footer(text="BFEE Hunger Games participants")
+        await ctx.send(embed=embed)
                 
     @bfeegames.command(name="add")
     @commands.guild_only()
@@ -99,10 +105,29 @@ class BFEEGames(commands.Cog):
             await self.dl_avatar(ctx, user.id)
 
         await ctx.send("Added ``{0}`` to BFEE Hunger Games".format(user.name))
+        
+    @bfeegames.command(name="updateavatar")
+    @commands.guild_only()
+    async def _updateavatar(self, ctx, user: discord.User = None):
+        """
+        Updates the avatar of a user
+        """
+
+        async with self.config.guild(ctx.guild).players() as pl:
+            if user.id in pl:
+                await self.dl_avatar(ctx, user.id)
+            else:
+                await ctx.send("``{0}`` is not part of the BFEE Hunger Games".format(user.name))
+                return
+
+        await ctx.send("Updated ``{0}'s`` avatar".format(user.name))
     
     @bfeegames.command(name="wipe")
     @commands.guild_only()
     async def _wipe(self,ctx):
+        """
+        Removes everyone from the games
+        """
         async with self.config.guild(ctx.guild).players() as pl:
             for x in pl:
                 pl.remove(x)

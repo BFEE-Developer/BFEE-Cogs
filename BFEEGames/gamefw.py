@@ -7,6 +7,7 @@ from .player import Player
 
 class GameFramework:
     active_games = {}
+    cur_summary = {}
 
     def new_game(self, channel_id, owner_id, owner_name):
         if channel_id in self.active_games:
@@ -100,37 +101,48 @@ class GameFramework:
         if not this_game.has_started:
             return {"status": "GAMENOTSTARTED"}
 
-        summary = this_game.step()
+        if self.cur_summary.get('messages') is None:
+            self.cur_summary["messages"] = []
 
-        if summary.get('winner') is not None:
-            self.active_games.pop(channel_id)
-            return {
-                'title': "{0} | Winner".format(this_game.title),
-                'color': 0xd0d645,
-                'description': "The winner is {0} from District {1}!".format(summary['winner'], summary['district']),
-                'footer': None
-            }
-        
-        if summary.get('allDead') is not None:
-            self.active_games.pop(channel_id)
-            return {
-                'title': "{0} | Winner".format(this_game.title),
-                'color': 0xd0d645,
-                'description': "All the contestants have died!",
-                'footer': None
-            }
+        if len(self.cur_summary["messages"]) == 0:
+            summary = this_game.step()
+            self.cur_summary = summary
+
+            if summary.get('winner') is not None:
+                self.active_games.pop(channel_id)
+                return {
+                    'title': "{0} | Winner".format(this_game.title),
+                    'color': 0xd0d645,
+                    'description': "The winner is {0} from District {1}!".format(summary['winner'], summary['district']),
+                    'footer': None
+                }
+            
+            if summary.get('allDead') is not None:
+                self.active_games.pop(channel_id)
+                return {
+                    'title': "{0} | Winner".format(this_game.title),
+                    'color': 0xd0d645,
+                    'description': "All the contestants have died!",
+                    'footer': None
+                }
+        else:
+            summary = self.cur_summary
 
         if summary['description'] is not None and len(summary['messages']) > 0:
+            # Cannon
             formatted_msg = "{0}\n\n> {1}".format(summary['description'], "\n> ".join(summary['messages']))
             avat = None
+            summary['messages'] = []
         elif summary['description'] is not None:
             formatted_msg = summary['description']
             avat = None
         else:
             #formatted_msg = "> {0}".format("\n> ".join(summary['messages']))
             #formatted_msg = "{0}".format(summary['messages'])
-            formatted_msg = "{0}".format(summary['messages'][0]["message"])
-            avat = summary['messages'][0]["avatars"]
+            f_msg = summary['messages'].pop()
+            formatted_msg = "{0}".format(f_msg["message"])
+            avat = f_msg["avatars"]
+            
 
         return {
             'day': summary["day"],

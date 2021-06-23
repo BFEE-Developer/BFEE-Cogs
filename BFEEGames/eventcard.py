@@ -85,7 +85,6 @@ class EventCard:
                     card.paste(ava, (x,ava_y))
                     x += dist_between_pics + size[0]
                 ava_y += 100
-                print("AVA_Y: {0}".format(ava_y))
 
             if len(avatarsraw) is 4:
                 ava_y -= 100
@@ -115,10 +114,7 @@ class EventCard:
         
         offset = ava_y + 10
         description_wrapped = self.get_wrapped_text(message, eventtextfont, line_length=(card_size[0] - 30))
-        print("")
-        print("")
-        print("")
-        print("")
+
         for msg in description_wrapped:
             card = self.add_textrowspace(card, card_color, eventtextfont.getsize("BFEE")[1] + 5)
             d = ImageDraw.Draw(card)
@@ -126,7 +122,6 @@ class EventCard:
             txtoffset = 10
             msgparts = msg.split()
             for x in msgparts:
-                print("WORD: {}".format(x))
                 if x[ 0 : 5 ] == "|>>>|":
                     # Colorize
                     word = "{0} ".format(x[5:])
@@ -134,10 +129,7 @@ class EventCard:
                 else:
                     word = "{0} ".format(x)
                     col = text_color
-                print("WORD2: {}".format(word))
                 d.text((txtoffset,offset), word.replace(space_char," "), font=eventtextfont, fill=col)
-                print("txtoffset: {0}".format(txtoffset))
-                print("offset: {0}".format(offset))
                 txtoffset += eventtextfont.getsize(word.replace(space_char," "))[0]
                 
             
@@ -218,7 +210,6 @@ class EventCard:
                 line_formatted = word_formatted
         lines.append(line)
         lines_formatted.append(line_formatted)
-        print(lines)
         return lines
         
     def add_textrowspace(self, img, color, add_height):
