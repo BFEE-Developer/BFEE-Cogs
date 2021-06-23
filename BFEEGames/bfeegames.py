@@ -49,6 +49,7 @@ class BFEEGames(commands.Cog):
         pass
     
     @bfeegames.command(name="load")
+    @checks.admin()
     @commands.guild_only()
     async def _load(self, ctx):
         """
@@ -60,10 +61,21 @@ class BFEEGames(commands.Cog):
             return await ctx.send_help()
         file = ctx.message.attachments[0]
         if not file.filename.lower().endswith(".json"):
+            await ctx.message.delete()
             return await ctx.send("Must be a json file.")
             
         await ctx.message.attachments[0].save(str(cog_data_path(self) / "events.json"))
+        await ctx.message.delete()
         await ctx.send("Loaded custom events")
+        
+    @bfeegames.command(name="gameleader")
+    @checks.admin()
+    @commands.guild_only()
+    async def _gameleader(self,ctx, role: discord.Role = None):
+        """
+        Tell the gme which role is the gameleader role
+        """
+        self.config.guild(ctx.guild).gameleaderrole = role
     
     @bfeegames.command(name="start")
     @commands.guild_only()
@@ -73,6 +85,8 @@ class BFEEGames(commands.Cog):
         """
         owner = ctx.author
         ret = self.gf.new_game(ctx.channel.id, owner.id, owner.name)
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         
         await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
                    
@@ -94,8 +108,8 @@ class BFEEGames(commands.Cog):
         """
         Lists all players participating in BFEE Hunger Games
         """
-        #if not self._check_if_gameleader(ctx.guild, ctx.author):
-        #    return
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         msg = []
         ps = await self.config.guild(ctx.guild).get_raw("players")
         if len(ps) == 0:
@@ -113,7 +127,8 @@ class BFEEGames(commands.Cog):
         """
         Add a user to the game
         """
-
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id in pl:
                 await ctx.send("``{0}`` is already registered".format(user.name))
@@ -129,7 +144,8 @@ class BFEEGames(commands.Cog):
         """
         Updates the avatar of a user
         """
-
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id in pl:
                 await self.dl_avatar(ctx, user.id)
@@ -140,6 +156,7 @@ class BFEEGames(commands.Cog):
         await ctx.send("Updated ``{0}'s`` avatar".format(user.name))
     
     @bfeegames.command(name="wipe")
+    @checks.admin()
     @commands.guild_only()
     async def _wipe(self,ctx):
         """
@@ -156,7 +173,8 @@ class BFEEGames(commands.Cog):
         """
         Remove a user from the game
         """
-        
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         async with self.config.guild(ctx.guild).players() as pl:
             if user.id not in pl:
                 await ctx.send("``{0}`` is not registered".format(user.name))
@@ -171,6 +189,8 @@ class BFEEGames(commands.Cog):
         """
         Cancels the current game in the channel.
         """
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         ret = self.gf.end_game(ctx.channel.id, ctx.author.id)
         await ctx.send("BFEE Hunger Games has been cancelled.")
 
@@ -181,6 +201,8 @@ class BFEEGames(commands.Cog):
         """
         Steps forward the current game in the channel by one round.
         """
+        if not self._check_if_gameleader(ctx.guild, ctx.author):
+            return
         ret = self.gf.step(ctx.channel.id, ctx.author.id)
        
         if ret.get('day') is not None:
@@ -215,3 +237,10 @@ class BFEEGames(commands.Cog):
         if not (cog_data_path(self) / "{0}.png".format(id)).is_file():
             await ctx.guild.get_member(id).avatar_url.save(cog_data_path(self) / "{0}.png".format(id))
         return True
+        
+    def _check_if_gameleader(self, guild, user: discord.User = None):
+        if user.guild_permissions.kick_members:
+            return True
+        if self.config.guild(guild).gameleaderrole in user.roles:
+            return True
+        return False 
