@@ -10,6 +10,7 @@ class BFEEAdmin(commands.Cog):
     # Variables
     default_guild = {
         "blockroles": [],
+        "logchannel": ""
     }
     
     banned_urls = [
@@ -196,19 +197,50 @@ class BFEEAdmin(commands.Cog):
             except discord.Forbidden:
                 pass
                 
+    @commands.group()
+    @checks.admin()
+    @commands.guild_only()
+    async def scam(self, ctx):
+        """Scam link settings."""
+        pass
+        
+    @scam.command(name="logchannel")
+    @checks.admin()
+    @commands.guild_only()
+    async def _logchannel(self, ctx, ch: discord.TextChannel = None):
+        if not ch:
+            return await ctx.send_help()
+        await self.config.guild(ctx.guild).logchannel.set(ch.id)    
+        await ctx.send("Scam logchannel is now {0}".format(ch.name))        
+                
     @commands.Cog.listener()
     async def on_message_without_command(self, message: discord.Message):
         if message.author.id != self.bot.user.id:
             server = message.guild
             roles = server.roles
             role = discord.utils.get(roles, id=286583179715018752)
+            ctx = await self.bot.get_context(message)
+            logchannel = 246234874011320321 #BFEE
+            #logchannelid = 418476587487461377 # Kaktus Test
             if len(self.banned_urls) > 0:
                 msg = message
                 if any(bannedword in message.content for bannedword in self.banned_urls):
-                    ch = self.bot.get_channel(418476587487461377)
-                    await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
+                    
+                    lch = await self.config.guild(ctx.guild).logchannel()
+                    if lch is None or lch == "":
+                        lch = logchannelid
+                        
+                    print(lch)
+                    ch = self.bot.get_channel(lch)
+                    try:
+                        await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
+                    except Exception:
+                        pass
                     try:
                         await message.author.add_roles(role, reason="Suspicious message")
+                    except Exception:
+                        pass
+                    try:
                         await message.delete()
                     except Exception:
                         pass
