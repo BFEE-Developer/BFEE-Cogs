@@ -207,6 +207,7 @@ class BFEEAdmin(commands.Cog):
     @checks.admin()
     @commands.guild_only()
     async def _logchannel(self, ctx, ch: discord.TextChannel = None):
+        """Sets which channel to log scam reports to."""
         if not ch:
             return await ctx.send_help()
         await self.config.guild(ctx.guild).logchannel.set(ch.id)    
