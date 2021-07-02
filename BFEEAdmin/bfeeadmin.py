@@ -199,13 +199,16 @@ class BFEEAdmin(commands.Cog):
     @commands.Cog.listener()
     async def on_message_without_command(self, message: discord.Message):
         if message.author.id != self.bot.user.id:
+            server = message.guild
+            roles = server.roles
+            role = discord.utils.get(roles, id=286583179715018752)
             if len(self.banned_urls) > 0:
                 msg = message
                 if any(bannedword in message.content for bannedword in self.banned_urls):
-                    ch = self.bot.get_channel(246234874011320321)
+                    ch = self.bot.get_channel(418476587487461377)
                     await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
                     try:
-                        
+                        await message.author.add_roles(role, reason="Suspicious message")
                         await message.delete()
                     except Exception:
                         pass
