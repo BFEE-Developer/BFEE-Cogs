@@ -12,6 +12,90 @@ class BFEEAdmin(commands.Cog):
         "blockroles": [],
     }
     
+    banned_urls = [
+        "stearmcommunnity.ru",
+        "stermccommunitty.ru",
+        "strearmcomunity.ru",
+        "stiemcommunitty.ru",
+        "streamcomunnity.ru",
+        "streancommunuty.ru",
+        "wowcloud9.com",
+        "fnaticprize.site",
+        "rollskin.ru",
+        "ezenze.org",
+        "csgocyber.ru",
+        "tradeoffers.me",
+        "tradeoffers.net.ru",
+        "wildday.com",
+        "winlems.org.ru",
+        "wixzero.pp.ru",
+        "seamcommunlty.com",
+        "seamcommunty.com",
+        "sleamtrade.org.ru",
+        "sleamcomnnunity.me",
+        "sleamconnunnity.me",
+        "sleamcormunity.me",
+        "sreancommuniity.com",
+        "staemcommeuneuity.ru",
+        "staerncomrmunity.com",
+        "steaamcomnnunity.com",
+        "steaimeecommuniity.com",
+        "wowfnatic.com",
+        "wowfnatic.site",
+        "alexnv.ru",
+        "alexandrnav.ru",
+        "alexandrs1.ru",
+        "ezence.ink",
+        "magictop.org.ru",
+        "natusvincerytos.org.ru",
+        "natusvincerytq.org.ru",
+        "natusvincerygivez.xyz",
+        "navispot.org.ru",
+        "navi.auction",
+        "steampromopage.ml",
+        "steamcannunlty.com",
+        "steamcommanitty.ru",
+        "steamcomminiity.site",
+        "nvdrop.com",
+        "operationbroken.xyz",
+        "please.net.ru",
+        "rocketcase.xyz",
+        "rollcase.com",
+        "newgive.com",
+        "steamcommnnunnity.world",
+        "steamcommnunty.com",
+        "steamcommunitycom.xyz",
+        "steamcommunlty.comprofilesbloomez.online",
+        "steamcommunniitly.ru",
+        "stleamconnunltytyztradeoffernewpartnhr15902271.xyz",
+        "streamcomnunely.com",
+        "tastyskill.net.ru",
+        "toomskins.xyz",
+        "topgames.org.ru",
+        "toprgames.xyz",
+        "topwgamez.xyz",
+        "topzgames.xyz",
+        "golex.org.ru",
+        "intimki.com",
+        "izinavi.org.ru",
+        "linktrade.pp.ua",
+        "fnaticwin.xyz",
+        "gamstoph.xyz",
+        "csmoneiy.us",
+        "csgowaycups.org.ru",
+        "ezdrop.net.ru",
+        "cloud9team.fun",
+        "steancomunnity.ru",
+        "katowice.ru",
+        "cloudteam9.com",
+        "streamcommunnlty.ru",
+        "stearncomminuty.ru",
+        "streammcomunnity.ru",
+        "steamcommunytu.ru",
+        "streammcomunity.ru",
+        "steamcommnuitry.com"
+    ]
+    
     def __init__(self, bot):
         self.bot = bot        
         self.config = Config.get_conf(self, identifier=13378427487733784274, force_registration=True)
@@ -111,6 +195,22 @@ class BFEEAdmin(commands.Cog):
                     pass
             except discord.Forbidden:
                 pass
+                
+    @commands.Cog.listener()
+    async def on_message_without_command(self, message: discord.Message):
+        if message.author.id != self.bot.user.id:
+            if len(self.banned_urls) > 0:
+                msg = message
+                if any(bannedword in message.content for bannedword in self.banned_urls):
+                    ch = self.bot.get_channel(246234874011320321)
+                    await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
+                    try:
+                        
+                        await message.delete()
+                    except Exception:
+                        pass
+            
+    
         
     async def _lockdown(self, ctx):
         #permissions = discord.Permissions()
