@@ -10,92 +10,91 @@ class BFEEAdmin(commands.Cog):
     # Variables
     default_guild = {
         "blockroles": [],
-        "logchannel": ""
+        "logchannel": "",
+        "banned_urls": [
+            "stearmcommunnity.ru",
+            "stermccommunitty.ru",
+            "strearmcomunity.ru",
+            "stiemcommunitty.ru",
+            "streamcomunnity.ru",
+            "streancommunuty.ru",
+            "wowcloud9.com",
+            "fnaticprize.site",
+            "rollskin.ru",
+            "ezenze.org",
+            "csgocyber.ru",
+            "tradeoffers.me",
+            "tradeoffers.net.ru",
+            "wildday.com",
+            "winlems.org.ru",
+            "wixzero.pp.ru",
+            "seamcommunlty.com",
+            "seamcommunty.com",
+            "sleamtrade.org.ru",
+            "sleamcomnnunity.me",
+            "sleamconnunnity.me",
+            "sleamcormunity.me",
+            "sreancommuniity.com",
+            "staemcommeuneuity.ru",
+            "staerncomrmunity.com",
+            "steaamcomnnunity.com",
+            "steaimeecommuniity.com",
+            "wowfnatic.com",
+            "wowfnatic.site",
+            "alexnv.ru",
+            "alexandrnav.ru",
+            "alexandrs1.ru",
+            "ezence.ink",
+            "magictop.org.ru",
+            "natusvincerytos.org.ru",
+            "natusvincerytq.org.ru",
+            "natusvincerygivez.xyz",
+            "navispot.org.ru",
+            "navi.auction",
+            "steampromopage.ml",
+            "steamcannunlty.com",
+            "steamcommanitty.ru",
+            "steamcomminiity.site",
+            "nvdrop.com",
+            "operationbroken.xyz",
+            "please.net.ru",
+            "rocketcase.xyz",
+            "rollcase.com",
+            "newgive.com",
+            "steamcommnnunnity.world",
+            "steamcommnunty.com",
+            "steamcommunitycom.xyz",
+            "steamcommunlty.comprofilesbloomez.online",
+            "steamcommunniitly.ru",
+            "stleamconnunltytyztradeoffernewpartnhr15902271.xyz",
+            "streamcomnunely.com",
+            "tastyskill.net.ru",
+            "toomskins.xyz",
+            "topgames.org.ru",
+            "toprgames.xyz",
+            "topwgamez.xyz",
+            "topzgames.xyz",
+            "golex.org.ru",
+            "intimki.com",
+            "izinavi.org.ru",
+            "linktrade.pp.ua",
+            "fnaticwin.xyz",
+            "gamstoph.xyz",
+            "csmoneiy.us",
+            "csgowaycups.org.ru",
+            "ezdrop.net.ru",
+            "cloud9team.fun",
+            "steancomunnity.ru",
+            "katowice.ru",
+            "cloudteam9.com",
+            "streamcommunnlty.ru",
+            "stearncomminuty.ru",
+            "streammcomunnity.ru",
+            "steamcommunytu.ru",
+            "streammcomunity.ru",
+            "steamcommnuitry.com"
+        ]
     }
-    
-    banned_urls = [
-        "stearmcommunnity.ru",
-        "stermccommunitty.ru",
-        "strearmcomunity.ru",
-        "stiemcommunitty.ru",
-        "streamcomunnity.ru",
-        "streancommunuty.ru",
-        "wowcloud9.com",
-        "fnaticprize.site",
-        "rollskin.ru",
-        "ezenze.org",
-        "csgocyber.ru",
-        "tradeoffers.me",
-        "tradeoffers.net.ru",
-        "wildday.com",
-        "winlems.org.ru",
-        "wixzero.pp.ru",
-        "seamcommunlty.com",
-        "seamcommunty.com",
-        "sleamtrade.org.ru",
-        "sleamcomnnunity.me",
-        "sleamconnunnity.me",
-        "sleamcormunity.me",
-        "sreancommuniity.com",
-        "staemcommeuneuity.ru",
-        "staerncomrmunity.com",
-        "steaamcomnnunity.com",
-        "steaimeecommuniity.com",
-        "wowfnatic.com",
-        "wowfnatic.site",
-        "alexnv.ru",
-        "alexandrnav.ru",
-        "alexandrs1.ru",
-        "ezence.ink",
-        "magictop.org.ru",
-        "natusvincerytos.org.ru",
-        "natusvincerytq.org.ru",
-        "natusvincerygivez.xyz",
-        "navispot.org.ru",
-        "navi.auction",
-        "steampromopage.ml",
-        "steamcannunlty.com",
-        "steamcommanitty.ru",
-        "steamcomminiity.site",
-        "nvdrop.com",
-        "operationbroken.xyz",
-        "please.net.ru",
-        "rocketcase.xyz",
-        "rollcase.com",
-        "newgive.com",
-        "steamcommnnunnity.world",
-        "steamcommnunty.com",
-        "steamcommunitycom.xyz",
-        "steamcommunlty.comprofilesbloomez.online",
-        "steamcommunniitly.ru",
-        "stleamconnunltytyztradeoffernewpartnhr15902271.xyz",
-        "streamcomnunely.com",
-        "tastyskill.net.ru",
-        "toomskins.xyz",
-        "topgames.org.ru",
-        "toprgames.xyz",
-        "topwgamez.xyz",
-        "topzgames.xyz",
-        "golex.org.ru",
-        "intimki.com",
-        "izinavi.org.ru",
-        "linktrade.pp.ua",
-        "fnaticwin.xyz",
-        "gamstoph.xyz",
-        "csmoneiy.us",
-        "csgowaycups.org.ru",
-        "ezdrop.net.ru",
-        "cloud9team.fun",
-        "steancomunnity.ru",
-        "katowice.ru",
-        "cloudteam9.com",
-        "streamcommunnlty.ru",
-        "stearncomminuty.ru",
-        "streammcomunnity.ru",
-        "steamcommunytu.ru",
-        "streammcomunity.ru",
-        "steamcommnuitry.com"
-    ]
     
     def __init__(self, bot):
         self.bot = bot        
@@ -211,22 +210,83 @@ class BFEEAdmin(commands.Cog):
         if not ch:
             return await ctx.send_help()
         await self.config.guild(ctx.guild).logchannel.set(ch.id)    
-        await ctx.send("Scam logchannel is now {0}".format(ch.name))        
+        await ctx.send("Scam logchannel is now {0}".format(ch.name))
+        
+    @scam.command(name="addurl")
+    @checks.admin()
+    @commands.guild_only()
+    async def _addurl(self, ctx, url: str = None):
+        """Adds url in scamlist."""
+        if not url:
+            return await ctx.send_help()
+        await self._add_scam_url(ctx.guild, url)
+        await ctx.send("Added ``{0}`` to scam list".format(url))
+        
+    @scam.command(name="removeurl")
+    @checks.admin()
+    @commands.guild_only()
+    async def _removeurl(self, ctx, url: str = None):
+        """Removes url in scamlist."""
+        if not url:
+            return await ctx.send_help()
+        if url not in await self._get_scam_url(ctx.guild):
+            try:
+                await ctx.send("URL not in list")
+            except:
+                pass
+        else:        
+            await self._del_scam_url(ctx.guild, url)
+            await ctx.send("Removed ``{0}`` from scam list".format(url))
+        
+    #@scam.command(name="listurl")
+    #@checks.admin()
+    #@commands.guild_only()
+    #async def _listurl(self, ctx):
+    #    """Lists urls in scamlist."""
+    #    emb = discord.Embed()
+    #    emb.title = "List of scam URLs."
+    #    emb.description = "Messages with one of these urls in them will be removed and reported."
+    #    urls = await self._get_scam_url(ctx.guild)
+    #    if not len(urls):
+    #        try:
+    #            return await ctx.send("No URLs configured")
+    #        except:
+    #            pass
+    #    for (let i = 0; i < oldMessage.cleanContent.length; i += 2000) {
+    #        const cont = oldMessage.cleanContent.substring(i, Math.min(oldMessage.cleanContent.length, i + 2000));
+    #        embed.addField("Old Message", cont);
+    #    }
+    #    emb.add_field(
+    #        name="URLs:", value="\n".join([x for x in urls])
+    #    )
+    #    try:
+    #        await ctx.send(embed=emb)
+    #    except discord.Forbidden:
+    #        try:
+    #            try:
+    #                await ctx.send("```\nList of scam URLs.:\n\n{}\n```".format("\n".join([x for x in urls])))
+    #            except:
+    #                pass
+    #        except discord.Forbidden:
+    #            pass
                 
     @commands.Cog.listener()
     async def on_message_without_command(self, message: discord.Message):
         if message.author.id != self.bot.user.id:
             server = message.guild
             roles = server.roles
-            #prole = 286583179715018752 # Kaktus
+            #prole = 816634246009192469 # Kaktus
             prole = 286583179715018752 # BFEE
             role = discord.utils.get(roles, id=prole)
             ctx = await self.bot.get_context(message)
             logchannelid = 246234874011320321 #BFEE
             #logchannelid = 418476587487461377 # Kaktus Test
-            if len(self.banned_urls) > 0:
+            
+            urls = await self._get_scam_url(ctx.guild)
+            
+            if len(urls) > 0:
                 msg = message
-                if any(bannedword in message.content for bannedword in self.banned_urls):
+                if any(bannedword in message.content for bannedword in urls):
                     
                     lch = await self.config.guild(ctx.guild).logchannel()
                     if lch is None or lch == "":
@@ -298,6 +358,17 @@ class BFEEAdmin(commands.Cog):
                         await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
                     except:
                         pass
+
+    async def _add_scam_url(self, guild, url):
+        async with self.config.guild(guild).banned_urls() as banned_urls_list:
+            banned_urls_list.append(url)
+            
+    async def _del_scam_url(self, guild, url):
+        async with self.config.guild(guild).banned_urls() as banned_urls_list:
+            banned_urls_list.remove(url)
+            
+    async def _get_scam_url(self, guild):
+        return await self.config.guild(guild).banned_urls()
             
     async def _add_block_role(self, guild, role):
         async with self.config.guild(guild).blockroles() as rolelist:
