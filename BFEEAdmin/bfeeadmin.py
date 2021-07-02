@@ -220,7 +220,7 @@ class BFEEAdmin(commands.Cog):
             roles = server.roles
             role = discord.utils.get(roles, id=286583179715018752)
             ctx = await self.bot.get_context(message)
-            logchannel = 246234874011320321 #BFEE
+            logchannelid = 246234874011320321 #BFEE
             #logchannelid = 418476587487461377 # Kaktus Test
             if len(self.banned_urls) > 0:
                 msg = message
