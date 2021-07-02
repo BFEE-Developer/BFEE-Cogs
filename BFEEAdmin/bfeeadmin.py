@@ -218,7 +218,9 @@ class BFEEAdmin(commands.Cog):
         if message.author.id != self.bot.user.id:
             server = message.guild
             roles = server.roles
-            role = discord.utils.get(roles, id=286583179715018752)
+            #prole = 286583179715018752 # Kaktus
+            prole = 286583179715018752 # BFEE
+            role = discord.utils.get(roles, id=prole)
             ctx = await self.bot.get_context(message)
             logchannelid = 246234874011320321 #BFEE
             #logchannelid = 418476587487461377 # Kaktus Test
