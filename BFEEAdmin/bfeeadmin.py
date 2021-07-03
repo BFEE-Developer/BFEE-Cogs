@@ -11,6 +11,7 @@ class BFEEAdmin(commands.Cog):
     default_guild = {
         "blockroles": [],
         "logchannel": "",
+        "applyrole": "",
         "banned_urls": [
             "stearmcommunnity.ru",
             "stermccommunitty.ru",
@@ -207,7 +208,6 @@ class BFEEAdmin(commands.Cog):
     @checks.admin()
     @commands.guild_only()
     async def _logchannel(self, ctx, ch: discord.TextChannel = None):
-        """Sets which channel to log scam reports to."""
         if not ch:
             return await ctx.send_help()
         await self.config.guild(ctx.guild).logchannel.set(ch.id)    
@@ -238,6 +238,16 @@ class BFEEAdmin(commands.Cog):
         else:        
             await self._del_scam_url(ctx.guild, url)
             await ctx.send("Removed ``{0}`` from scam list".format(url))
+            
+    @scam.command(name="role")
+    @checks.admin()
+    @commands.guild_only()
+    async def _role(self, ctx, role: discord.Role = None):
+        """Sets role which the user will get when postin scam urls."""
+        if not role:
+            return await ctx.send_help()
+        await self.config.guild(ctx.guild).applyrole.set(role.id)    
+        await ctx.send("Scam role is now {0}".format(role.name))
         
     #@scam.command(name="listurl")
     #@checks.admin()
@@ -276,13 +286,13 @@ class BFEEAdmin(commands.Cog):
         if message.author.id != self.bot.user.id:
             server = message.guild
             roles = server.roles
-            #prole = 816634246009192469 # Kaktus
-            prole = 286583179715018752 # BFEE
-            role = discord.utils.get(roles, id=prole)
-            ctx = await self.bot.get_context(message)
-            logchannelid = 246234874011320321 #BFEE
-            #logchannelid = 418476587487461377 # Kaktus Test
             
+            ctx = await self.bot.get_context(message)
+            
+            prole = await self.config.guild(ctx.guild).applyrole()
+            if prole is None or prole == "":
+                prole = None
+
             urls = await self._get_scam_url(ctx.guild)
             
             if len(urls) > 0:
@@ -291,18 +301,19 @@ class BFEEAdmin(commands.Cog):
                     
                     lch = await self.config.guild(ctx.guild).logchannel()
                     if lch is None or lch == "":
-                        lch = logchannelid
-                        
-                    print(lch)
-                    ch = self.bot.get_channel(lch)
-                    try:
-                        await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
-                    except Exception:
-                        pass
-                    try:
-                        await message.author.add_roles(role, reason="Suspicious message")
-                    except Exception:
-                        pass
+                        return
+                    else:
+                        ch = self.bot.get_channel(lch)
+                        try:
+                            await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
+                        except Exception:
+                            pass
+                    if prole is not None:
+                        try:
+                            role = discord.utils.get(roles, id=prole)
+                            await message.author.add_roles(role, reason="Suspicious message")
+                        except Exception:
+                            pass
                     try:
                         await message.delete()
                     except Exception:
@@ -311,9 +322,6 @@ class BFEEAdmin(commands.Cog):
     
         
     async def _lockdown(self, ctx):
-        #permissions = discord.Permissions()
-        #permissions.update(add_reactions = False)
-        #permissions.update(send_messages = False)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
             try:
@@ -336,9 +344,6 @@ class BFEEAdmin(commands.Cog):
                         pass
 
     async def _unlock(self, ctx):
-        #permissions = discord.Permissions()
-        #permissions.update(add_reactions = True)
-        #permissions.update(send_messages = True)
         roles = await self._get_block_roles(ctx.guild)
         if not len(roles):
             try:
@@ -381,7 +386,3 @@ class BFEEAdmin(commands.Cog):
     
     async def _get_block_roles(self, guild):
         return await self.config.guild(guild).blockroles()
-    
-    # permissions = discord.Permissions()
-    # permissions.update(kick_members = False)
-    # await role.edit(reason = None, colour = discord.Colour.blue(), permissions=permissions, add_reactions=False)
