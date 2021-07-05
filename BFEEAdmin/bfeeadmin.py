@@ -259,9 +259,6 @@ class BFEEAdmin(commands.Cog):
     @commands.guild_only()
     async def _listurl(self, ctx):
         """Lists urls in scamlist."""
-    #    emb = discord.Embed()
-    #    emb.title = "List of scam URLs."
-    #    emb.description = "Messages with one of these urls in them will be removed and reported."
         urls = await self._get_scam_url(ctx.guild)
         if not len(urls):
             try:
@@ -280,24 +277,6 @@ class BFEEAdmin(commands.Cog):
             embed.set_footer(text="Page {num}/{total}".format(num=idx, total=len(pages)))
             embed_pages.append(embed)
         await menus.menu(ctx, embed_pages, menus.DEFAULT_CONTROLS)
-         
-    #    for (let i = 0; i < oldMessage.cleanContent.length; i += 2000) {
-    #        const cont = oldMessage.cleanContent.substring(i, Math.min(oldMessage.cleanContent.length, i + 2000));
-    #        embed.addField("Old Message", cont);
-    #    }
-    #    emb.add_field(
-    #        name="URLs:", value="\n".join([x for x in urls])
-    #    )
-    #    try:
-    #        await ctx.send(embed=emb)
-    #    except discord.Forbidden:
-    #        try:
-    #            try:
-    #                await ctx.send("```\nList of scam URLs.:\n\n{}\n```".format("\n".join([x for x in urls])))
-    #            except:
-    #                pass
-    #        except discord.Forbidden:
-    #            pass
                 
     @commands.Cog.listener()
     async def on_message_without_command(self, message: discord.Message):
