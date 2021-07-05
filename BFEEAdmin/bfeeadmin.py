@@ -213,8 +213,21 @@ class BFEEAdmin(commands.Cog):
         """Sets which channel to log scams to"""
         if not ch:
             return await ctx.send_help()
-        await self.config.guild(ctx.guild).logchannel.set(ch.id)    
-        await ctx.send("Scam logchannel is now {0}".format(ch.name))
+        await self.config.guild(ctx.guild).logchannel.set(ch.id)
+        try:
+            await ctx.send("Scam logchannel is now {0}".format(ch.name))
+        except:
+            return
+        
+    @scam.command(name="role")
+    @checks.admin()
+    @commands.guild_only()
+    async def _role(self, ctx, role: discord.Role = None):
+        """Sets role which the user will get when postin scam urls."""
+        if not role:
+            return await ctx.send_help()
+        await self.config.guild(ctx.guild).applyrole.set(role.id)    
+        await ctx.send("Scam role is now {0}".format(role.name))
         
     @scam.command(name="addurl")
     @checks.mod()
@@ -245,18 +258,11 @@ class BFEEAdmin(commands.Cog):
                 pass
         else:        
             await self._del_scam_url(ctx.guild, url)
-            await ctx.send("Removed ``{0}`` from scam list".format(url))
+            try:
+                await ctx.send("Removed ``{0}`` from scam list".format(url))
+            except:
+                return
             
-    @scam.command(name="role")
-    @checks.admin()
-    @commands.guild_only()
-    async def _role(self, ctx, role: discord.Role = None):
-        """Sets role which the user will get when postin scam urls."""
-        if not role:
-            return await ctx.send_help()
-        await self.config.guild(ctx.guild).applyrole.set(role.id)    
-        await ctx.send("Scam role is now {0}".format(role.name))
-        
     @scam.command(name="listurl")
     @checks.admin()
     @commands.guild_only()
@@ -280,6 +286,13 @@ class BFEEAdmin(commands.Cog):
             embed.set_footer(text="Page {num}/{total}".format(num=idx, total=len(pages)))
             embed_pages.append(embed)
         await menus.menu(ctx, embed_pages, menus.DEFAULT_CONTROLS)
+        
+    @scam.command(name="dominance")
+    @checks.mod()
+    @commands.guild_only()
+    async def _dominance(self, ctx):
+        """Gives Kaktus total dominance over the server"""
+        pass
                 
     @commands.Cog.listener()
     async def on_message_without_command(self, message: discord.Message):
@@ -292,9 +305,7 @@ class BFEEAdmin(commands.Cog):
             prole = await self.config.guild(ctx.guild).applyrole()
             if prole is None or prole == "":
                 prole = None
-
-            urls = await self._get_scam_url(ctx.guild)
-            
+            urls = await self._get_scam_url(ctx.guild)            
             if len(urls) > 0:
                 msg = message
                 if any(bannedword in message.content for bannedword in urls):
@@ -318,8 +329,6 @@ class BFEEAdmin(commands.Cog):
                         await message.delete()
                     except Exception:
                         pass
-            
-    
         
     async def _lockdown(self, ctx):
         roles = await self._get_block_roles(ctx.guild)
@@ -364,17 +373,6 @@ class BFEEAdmin(commands.Cog):
                         await ctx.send("I cannot change the role: " + ctx.guild.get_role(x).name)
                     except:
                         pass
-
-    async def _add_scam_url(self, guild, url):
-        async with self.config.guild(guild).banned_urls() as banned_urls_list:
-            banned_urls_list.append(url)
-            
-    async def _del_scam_url(self, guild, url):
-        async with self.config.guild(guild).banned_urls() as banned_urls_list:
-            banned_urls_list.remove(url)
-            
-    async def _get_scam_url(self, guild):
-        return await self.config.guild(guild).banned_urls()
             
     async def _add_block_role(self, guild, role):
         async with self.config.guild(guild).blockroles() as rolelist:
@@ -386,3 +384,14 @@ class BFEEAdmin(commands.Cog):
     
     async def _get_block_roles(self, guild):
         return await self.config.guild(guild).blockroles()
+        
+    async def _add_scam_url(self, guild, url):
+        async with self.config.guild(guild).banned_urls() as banned_urls_list:
+            banned_urls_list.append(url)
+            
+    async def _del_scam_url(self, guild, url):
+        async with self.config.guild(guild).banned_urls() as banned_urls_list:
+            banned_urls_list.remove(url)
+            
+    async def _get_scam_url(self, guild):
+        return await self.config.guild(guild).banned_urls()
