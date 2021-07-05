@@ -207,6 +207,7 @@ class BFEEAdmin(commands.Cog):
     @scam.command(name="logchannel")
     @checks.admin()
     @commands.guild_only()
+    """Sets which channel to log scams to"""
     async def _logchannel(self, ctx, ch: discord.TextChannel = None):
         if not ch:
             return await ctx.send_help()
@@ -214,17 +215,19 @@ class BFEEAdmin(commands.Cog):
         await ctx.send("Scam logchannel is now {0}".format(ch.name))
         
     @scam.command(name="addurl")
-    @checks.admin()
+    @checks.mod()
     @commands.guild_only()
-    async def _addurl(self, ctx, url: str = None):
+    async def _addurl(self, ctx, *, url: str = None):
         """Adds url in scamlist."""
         if not url:
             return await ctx.send_help()
-        await self._add_scam_url(ctx.guild, url)
-        await ctx.send("Added ``{0}`` to scam list".format(url))
+        urls = url.split()
+        for x in urls:
+            await self._add_scam_url(ctx.guild, x)
+            await ctx.send("Added ``{0}`` to scam list".format(x))
         
     @scam.command(name="removeurl")
-    @checks.admin()
+    @checks.mod()
     @commands.guild_only()
     async def _removeurl(self, ctx, url: str = None):
         """Removes url in scamlist."""
@@ -305,7 +308,7 @@ class BFEEAdmin(commands.Cog):
                     else:
                         ch = self.bot.get_channel(lch)
                         try:
-                            await ch.send("The user ``{0}`` sent message ``{1}`` in channel ``{2}``".format(message.author.name, message.content, message.channel))
+                            await ch.send("The user ``{0} ({1})`` sent message ``{2}`` in channel ``{3}``".format(message.author.name, message.author.id, message.content, message.channel))
                         except Exception:
                             pass
                     if prole is not None:
