@@ -225,9 +225,11 @@ class BFEEAdmin(commands.Cog):
             return await ctx.send_help()
         urls = url.split()
         for x in urls:
-            if x not in await self._get_scam_url(ctx.guild):
-                await self._add_scam_url(ctx.guild, x)
-                await ctx.send("Added ``{0}`` to scam list".format(x))
+            if x.strip() not in await self._get_scam_url(ctx.guild):
+                await self._add_scam_url(ctx.guild, x.strip())
+                await ctx.send("Added ``{0}`` to scam list".format(x.strip()))
+            else:
+                await ctx.send("``{0}`` already in list".format(x.strip()))
         
     @scam.command(name="removeurl")
     @checks.mod()
