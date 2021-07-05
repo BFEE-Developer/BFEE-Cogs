@@ -200,7 +200,7 @@ class BFEEAdmin(commands.Cog):
                 pass
                 
     @commands.group()
-    @checks.admin()
+    @checks.mod()
     @commands.guild_only()
     async def scam(self, ctx):
         """Scam link settings."""
