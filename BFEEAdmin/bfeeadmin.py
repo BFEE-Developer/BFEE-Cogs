@@ -1,11 +1,13 @@
 import discord
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
+from redbot.core.utils import menus
+from redbot.core.utils.chat_formatting import box, pagify, escape, humanize_list
 
 class BFEEAdmin(commands.Cog):
     
     __author__ = "OGKaktus (OGKaktus#5299)"
-    __version__ = "1.0"
+    __version__ = "1.5"
     
     # Variables
     default_guild = {
@@ -207,7 +209,6 @@ class BFEEAdmin(commands.Cog):
     @scam.command(name="logchannel")
     @checks.admin()
     @commands.guild_only()
-    """Sets which channel to log scams to"""
     async def _logchannel(self, ctx, ch: discord.TextChannel = None):
         if not ch:
             return await ctx.send_help()
@@ -252,20 +253,33 @@ class BFEEAdmin(commands.Cog):
         await self.config.guild(ctx.guild).applyrole.set(role.id)    
         await ctx.send("Scam role is now {0}".format(role.name))
         
-    #@scam.command(name="listurl")
-    #@checks.admin()
-    #@commands.guild_only()
-    #async def _listurl(self, ctx):
-    #    """Lists urls in scamlist."""
+    @scam.command(name="listurl")
+    @checks.admin()
+    @commands.guild_only()
+    async def _listurl(self, ctx):
+        """Lists urls in scamlist."""
     #    emb = discord.Embed()
     #    emb.title = "List of scam URLs."
     #    emb.description = "Messages with one of these urls in them will be removed and reported."
-    #    urls = await self._get_scam_url(ctx.guild)
-    #    if not len(urls):
-    #        try:
-    #            return await ctx.send("No URLs configured")
-    #        except:
-    #            pass
+        urls = await self._get_scam_url(ctx.guild)
+        if not len(urls):
+            try:
+                return await ctx.send("No URLs configured")
+            except:
+                return
+        content = " \n".join(map("**{0}**".format, urls))
+        pages = list(pagify(content, page_length=1024))
+        embed_pages = []
+        for idx, page in enumerate(pages, start=1):
+            embed = discord.Embed(
+                title="Scam URL list",
+                description=page,
+                colour=await ctx.embed_colour(),
+            )
+            embed.set_footer(text="Page {num}/{total}".format(num=idx, total=len(pages)))
+            embed_pages.append(embed)
+        await menus.menu(ctx, embed_pages, menus.DEFAULT_CONTROLS)
+         
     #    for (let i = 0; i < oldMessage.cleanContent.length; i += 2000) {
     #        const cont = oldMessage.cleanContent.substring(i, Math.min(oldMessage.cleanContent.length, i + 2000));
     #        embed.addField("Old Message", cont);
