@@ -7,7 +7,7 @@ from redbot.core.utils.chat_formatting import box, pagify, escape, humanize_list
 class BFEEAdmin(commands.Cog):
     
     __author__ = "OGKaktus (OGKaktus#5299)"
-    __version__ = "1.5"
+    __version__ = "1.6"
     
     # Variables
     default_guild = {
@@ -237,12 +237,20 @@ class BFEEAdmin(commands.Cog):
         if not url:
             return await ctx.send_help()
         urls = url.split()
+        added = 0
+        alreadyinlist = 0
         for x in urls:
             if x.strip() not in await self._get_scam_url(ctx.guild):
                 await self._add_scam_url(ctx.guild, x.strip())
-                await ctx.send("Added ``{0}`` to scam list".format(x.strip()))
+                if len(urls) == 1:
+                    await ctx.send("Added ``{0}`` to scam list".format(x.strip()))
+                added += 1
             else:
-                await ctx.send("``{0}`` already in list".format(x.strip()))
+                alreadyinlist += 1
+                if len(urls) == 1:
+                    await ctx.send("``{0}`` already in list".format(x.strip()))
+        if len(urls) > 1:
+            await ctx.send("Added ``{0}`` urls, ``{1}`` already in list".format(added, alreadyinlist))
         
     @scam.command(name="removeurl")
     @checks.mod()
