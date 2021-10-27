@@ -11,9 +11,12 @@ class GameFramework:
 
     def new_game(self, channel_id, owner_id, owner_name):
         if channel_id in self.active_games:
+            this_game = self.active_games[channel_id]
             return {"status": "GAMESTARTED", "owner": this_game.owner_id}
+        print("---------------------------")
         self.active_games[channel_id] = Game(owner_name, owner_id)
-        return True
+        return {"status": "GAMESTART", "owner": owner_id}
+        #return True
 
     async def add_player(self, channel_id, imagep, user: discord.User = None):
         if channel_id not in self.active_games:

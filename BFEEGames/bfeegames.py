@@ -103,7 +103,7 @@ class BFEEGames(commands.Cog):
                 await ctx.send("Game already started by ``{0}``".format(ctx.guild.get_member(ret["owner"]).name))
                 return
         
-        await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
+        #await ctx.send("{0} has started BFEE Hunger Games!\nPreparing game...".format(owner.mention))
                    
         ps = await self.config.guild(ctx.guild).get_raw("players")
         random.shuffle(ps)
@@ -111,6 +111,18 @@ class BFEEGames(commands.Cog):
             ret = await self.gf.add_player(ctx.channel.id, str(cog_data_path(self) / "{0}.png".format(x)), ctx.guild.get_member(x))
         
         ret = self.gf.start_game(ctx.channel.id, ctx.author.id)
+        
+        if ret.get('status') is not None:
+            if ret.get('status') is "NOTENOUGHPLAYERS":
+                await ctx.send("Not enough players to start BFEE Hunger Games!")
+                return
+            if ret.get('status') is "GAMEALREADYSTARTED":
+                await ctx.send("Game is already started!")
+                return
+            if ret.get('status') is "NOTOWNER":
+                await ctx.send("You are not the owner of this game!")
+                return
+            
        
         embed = discord.Embed(title=ret['title'], description=ret['description'])
         embed.set_footer(text=ret['footer'])
@@ -131,7 +143,13 @@ class BFEEGames(commands.Cog):
             await ctx.send("There are no players")
             return
         for x in ps:
-            msg.append("★ {0}".format(ctx.guild.get_member(int(x)).name))
+            print(x)
+            if ctx.guild.get_member(int(x)) == None:
+                async with self.config.guild(ctx.guild).players() as pl:
+                    pl.remove(x)
+            else:
+                msg.append("★ {0}".format(ctx.guild.get_member(int(x)).name))
+                #msg.append("★ {0} ({1})".format(ctx.guild.get_member(int(x)).name, int(x)))
         embed = discord.Embed(title="These are our brave souls", description="\n".join(msg))
         embed.set_footer(text="BFEE Hunger Games participants")
         await ctx.send(embed=embed)
