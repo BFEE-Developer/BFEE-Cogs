@@ -310,6 +310,9 @@ class BFEEAdmin(commands.Cog):
             
             ctx = await self.bot.get_context(message)
             
+            if message.author.guild_permissions.kick_members:
+                return
+            
             prole = await self.config.guild(ctx.guild).applyrole()
             if prole is None or prole == "":
                 prole = None
