@@ -93,7 +93,7 @@ class BFEEGames(commands.Cog):
         """
         Start a new BFEE Hunger Games
         """
-        if not self._check_if_gameleader(ctx.guild, ctx.author):
+        if not await self._check_if_gameleader(ctx.guild, ctx.author):
             return
         owner = ctx.author
         ret = self.gf.new_game(ctx.channel.id, owner.id, owner.name)
