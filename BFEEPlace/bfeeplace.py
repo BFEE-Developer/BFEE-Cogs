@@ -7,9 +7,12 @@ from redbot.core.utils import menus
 from redbot.core.utils.chat_formatting import box, pagify, escape, humanize_list
 
 class BFEEPlace(commands.Cog):
+    """BFEE Place Cog"""
 
     __author__ = "OGKaktus (OGKaktus#5299)"
     __version__ = "1.0"
+    
+    default_guild = {}
 
     post_url = "https://place.bfee.co/addCord.php"
 
