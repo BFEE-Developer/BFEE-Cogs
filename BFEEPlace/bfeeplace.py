@@ -36,9 +36,9 @@ class BFEEPlace(commands.Cog):
         place_color = meta_data[2]
         place_user = ctx.message.author.name
         
-        if not isinstance(place_x, int):
+        if not place_x.isdigit():
             return await ctx.send("Not a valid X coordinate ({0})".format(place_x))
-        if not isinstance(place_y, int):
+        if not place_y.isdigit():
             return await ctx.send("Not a valid Y coordinate ({0})".format(place_y))
             
         match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', place_color)
