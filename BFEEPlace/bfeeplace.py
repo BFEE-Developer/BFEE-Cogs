@@ -45,12 +45,11 @@ class BFEEPlace(commands.Cog):
         if not match:
             return await ctx.send("Not a HEX-Color")
 
+        try:
+            post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
+            x = requests.post(self.post_url, data = post_obj)
         except discord.Forbidden:
-            try:
-                post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
-                x = requests.post(self.post_url, data = post_obj)
-            except discord.Forbidden:
-                pass
+            pass
 
         if x.text == "OK":
             return await ctx.send("Pixel added")
