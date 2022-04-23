@@ -20,7 +20,10 @@ class BFEEPlace(commands.Cog):
         self.bot = bot        
         self.config = Config.get_conf(self, identifier=13378942487733784001, force_registration=True)
         self.config.register_guild(**self.default_guild)
-        
+
+    def cog_unload(self):
+        pass
+
     @commands.command(name="place")
     @commands.guild_only()
     async def place(self, ctx, *, placedata: str = None):
@@ -41,14 +44,14 @@ class BFEEPlace(commands.Cog):
         match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', place_color)
         if not match:
             return await ctx.send("Not a HEX-Color")
-            
+
         except discord.Forbidden:
             try:
                 post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
                 x = requests.post(self.post_url, data = post_obj)
             except discord.Forbidden:
                 pass
-        
+
         if x.text == "OK":
             return await ctx.send("Pixel added")
         else:
