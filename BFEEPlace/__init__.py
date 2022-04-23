@@ -9,6 +9,5 @@
 	"short": "BFEE Place cog",
 	"tags": [
 		"bfee"
-	],
-	"disabled" : false
+	]
 }
