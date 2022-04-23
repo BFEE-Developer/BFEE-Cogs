@@ -37,13 +37,13 @@ class BFEEPlace(commands.Cog):
         place_user = ctx.message.author.name
         
         if not isinstance(place_x, int):
-            return await ctx.send("Not a valid X coordinate")
+            return await ctx.send("Not a valid X coordinate ({0})".format(place_x))
         if not isinstance(place_y, int):
-            return await ctx.send("Not a valid Y coordinate")
+            return await ctx.send("Not a valid Y coordinate ({0})".format(place_y))
             
         match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', place_color)
         if not match:
-            return await ctx.send("Not a HEX-Color")
+            return await ctx.send("Not a HEX-Color ({0})".format(place_color))
 
         try:
             post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
