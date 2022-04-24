@@ -49,7 +49,7 @@ class BFEEPlace(commands.Cog):
 
     @place.command(name="put")
     @commands.guild_only()
-    async def _put(self, ctx, *, x: str = None, y: str = None, color: str = None):
+    async def _put(self, ctx, x: str = None, y: str = None, color: str = None):
         """Places a pixel on the canvas
         
         Usage: !place put X, Y, COLOR
