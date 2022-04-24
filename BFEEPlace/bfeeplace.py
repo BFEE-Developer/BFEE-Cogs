@@ -25,10 +25,22 @@ class BFEEPlace(commands.Cog):
 
     def cog_unload(self):
         pass
-
-    @commands.command(name="place")
+        
+    @commands.group()
     @commands.guild_only()
-    async def place(self, ctx, *, x: str = None, y: str = None, color: str = None):
+    async def place(self, ctx):
+        """BFEE Canvas painter"""
+        pass
+        
+    @place.command(name="stats")
+    @commands.guild_only()
+    async def put(self, ctx, user: discord.User = None):
+        """Prints statistics about the user"""
+        pass
+
+    @place.command(name="put")
+    @commands.guild_only()
+    async def put(self, ctx, *, x: str = None, y: str = None, color: str = None):
         """Usage: !place X, Y, COLOR
         Usage for Mazt3rz: !place X, Y, COLOUR
         
@@ -40,10 +52,6 @@ class BFEEPlace(commands.Cog):
             return await ctx.send_help()
         if not color:
             return await ctx.send_help()
-        #meta_data = placedata.split()
-        #place_x = meta_data[0]
-        #place_y = meta_data[1]
-        #place_color = meta_data[2]
 
         place_x = x
         place_y = y
