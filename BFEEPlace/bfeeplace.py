@@ -39,6 +39,9 @@ class BFEEPlace(commands.Cog):
         try:
             post_obj = {'type': 'stats', 'user': user}
             x = requests.post(self.post_url, data = post_obj)
+            data = x.json()
+            user = discord.utils.get(client.users, name=data["user"], discriminator=data["disc"])
+            await ctx.send("{0} has placed {1} pixels in {2} days.".format(user.mention, data["pixels"], data["days"]))
         except discord.Forbidden:
             pass
 
