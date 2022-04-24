@@ -28,14 +28,22 @@ class BFEEPlace(commands.Cog):
 
     @commands.command(name="place")
     @commands.guild_only()
-    async def place(self, ctx, *, placedata: str = None):
-        """Place a pixel at coord. X, Y, COLOR/COLOR"""
+    async def place(self, ctx, *, x: str = None, y: str = None, color: str = None):
+        """Usage: !place X, Y, COLOR
+        Usage for Mazt3rz: !place X, Y, COLOUR
+        
+           https://place.bfee.co
+        """
         if not placedata:
             return await ctx.send_help()
-        meta_data = placedata.split()
-        place_x = meta_data[0]
-        place_y = meta_data[1]
-        place_color = meta_data[2]
+        #meta_data = placedata.split()
+        #place_x = meta_data[0]
+        #place_y = meta_data[1]
+        #place_color = meta_data[2]
+
+        place_x = x
+        place_y = y
+        place_color = color
         place_user = ctx.message.author.name
         
         if not place_x.isdigit():
