@@ -34,7 +34,11 @@ class BFEEPlace(commands.Cog):
         
            https://place.bfee.co
         """
-        if not placedata:
+        if not x:
+            return await ctx.send_help()
+        if not y:
+            return await ctx.send_help()
+        if not color:
             return await ctx.send_help()
         #meta_data = placedata.split()
         #place_x = meta_data[0]
