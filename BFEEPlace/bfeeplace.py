@@ -47,9 +47,9 @@ class BFEEPlace(commands.Cog):
         if not match:
             return await ctx.send("Not a HEX-Color ({0})".format(place_color))
             
-        if(int(place_x) > self.max_x:
+        if(int(place_x) > self.max_x):
             return await ctx.send("X coordinate is outside of the bounds ({}))".format(self.max_x))
-        if(int(place_y) > self.max_y:
+        if(int(place_y) > self.max_y):
             return await ctx.send("Y coordinate is outside of the bounds ({}))".format(self.max_y))
 
         try:
