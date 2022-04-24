@@ -36,13 +36,13 @@ class BFEEPlace(commands.Cog):
     @commands.guild_only()
     async def _stats(self, ctx, user: discord.User = None):
         """Prints statistics about the user"""
-        client = discord.Client()
+
         try:
             post_obj = {'type': 'stats', 'user': user}
             x = requests.post(self.post_url, data = post_obj)
             data = x.json()
-            statsuser = discord.utils.get(client.users, name=data["user"], discriminator=data["disc"])
-            await ctx.send("{0} has placed {1} pixels in {2} days.".format(statsuser.mention(), data["pixels"], data["days"]))
+            statsuser = discord.utils.get(ctx.message.server.members, name=data["user"], discriminator=data["disc"])
+            await ctx.send("{0} has placed {1} pixels in {2} days.".format(statsuser.mention, data["pixels"], data["days"]))
         except discord.Forbidden:
             pass
 
