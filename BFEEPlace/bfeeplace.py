@@ -13,8 +13,8 @@ class BFEEPlace(commands.Cog):
     __version__ = "1.0"
     
     default_guild = {}
-    max_x = 600
-    max_y = 600
+    max_x = 640
+    max_y = 480
 
     post_url = "https://place.bfee.co/addCord.php"
 
