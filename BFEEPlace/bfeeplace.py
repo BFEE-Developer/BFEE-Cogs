@@ -36,6 +36,7 @@ class BFEEPlace(commands.Cog):
     @commands.guild_only()
     async def _stats(self, ctx, user: discord.User = None):
         """Prints statistics about the user"""
+        client = discord.Client()
         try:
             post_obj = {'type': 'stats', 'user': user}
             x = requests.post(self.post_url, data = post_obj)
