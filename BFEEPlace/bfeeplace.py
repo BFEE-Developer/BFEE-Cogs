@@ -51,6 +51,10 @@ class BFEEPlace(commands.Cog):
             return await ctx.send("X coordinate is outside of the bounds ({}))".format(self.max_x))
         if(int(place_y) > self.max_y):
             return await ctx.send("Y coordinate is outside of the bounds ({}))".format(self.max_y))
+        if(int(place_x) < 1):
+            return await ctx.send("Cant paint outsife the canvas, dimwit :P")
+        if(int(place_y) < 1):
+            return await ctx.send("Cant paint outsife the canvas, dimwit :P")
 
         try:
             post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
