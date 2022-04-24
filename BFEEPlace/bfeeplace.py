@@ -13,6 +13,8 @@ class BFEEPlace(commands.Cog):
     __version__ = "1.0"
     
     default_guild = {}
+    max_x = 600
+    max_y = 600
 
     post_url = "https://place.bfee.co/addCord.php"
 
@@ -44,6 +46,11 @@ class BFEEPlace(commands.Cog):
         match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', place_color)
         if not match:
             return await ctx.send("Not a HEX-Color ({0})".format(place_color))
+            
+        if(int(place_x) > self.max_x:
+            return await ctx.send("X coordinate is outside of the bounds ({}))".format(self.max_x))
+        if(int(place_y) > self.max_y:
+            return await ctx.send("Y coordinate is outside of the bounds ({}))".format(self.max_y))
 
         try:
             post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
