@@ -34,17 +34,23 @@ class BFEEPlace(commands.Cog):
         
     @place.command(name="stats")
     @commands.guild_only()
-    async def put(self, ctx, user: discord.User = None):
+    async def _stats(self, ctx, user: discord.User = None):
         """Prints statistics about the user"""
-        pass
+        try:
+            post_obj = {'type': 'stats', 'user': user}
+            x = requests.post(self.post_url, data = post_obj)
+        except discord.Forbidden:
+            pass
 
     @place.command(name="put")
     @commands.guild_only()
-    async def put(self, ctx, *, x: str = None, y: str = None, color: str = None):
-        """Usage: !place X, Y, COLOR
-        Usage for Mazt3rz: !place X, Y, COLOUR
+    async def _put(self, ctx, *, x: str = None, y: str = None, color: str = None):
+        """Places a pixel on the canvas
         
-           https://place.bfee.co
+        Usage: !place put X, Y, COLOR
+        Usage for Mazt3rz: !place put X, Y, COLOUR
+        
+        URL: https://place.bfee.co
         """
         if not x:
             return await ctx.send_help()
@@ -77,7 +83,7 @@ class BFEEPlace(commands.Cog):
             return await ctx.send("Tried to paint outide of the canvas, but the paint fell on the floor...")
 
         try:
-            post_obj = {'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
+            post_obj = {'type': 'put', 'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
             x = requests.post(self.post_url, data = post_obj)
         except discord.Forbidden:
             pass
