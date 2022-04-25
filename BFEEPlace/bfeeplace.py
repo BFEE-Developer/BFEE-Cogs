@@ -1,6 +1,7 @@
 import discord
 import requests
 import re
+import random
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
 from redbot.core.utils import menus
@@ -17,6 +18,29 @@ class BFEEPlace(commands.Cog):
     max_y = 480
 
     post_url = "https://place.bfee.co/addCord.php"
+    
+    error_msg = [
+        "Oops something went wrong",
+        "Oopsie Doopsie, an error occured",
+        "An error, occured has",
+        "*scratches head* I think something went wrong",
+        "Out of service, try again in 1 to 9325663 seconds"
+    ]
+    
+    oob_paint_error = [
+        "Tried to paint outide of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess? (" + self.max_x + "," + self.max_y + ")",
+        "Darnit, we havent invented paint that sticks to a non canvas area yet... (" + self.max_x + "," + self.max_y + ")",
+        "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (" + self.max_x + "," + self.max_y + ")",
+        "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (" + self.max_x + "," + self.max_y + ")",
+        "*sigh* Thats not ON the canvas... (" + self.max_x + "," + self.max_y + ")",
+        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (" + self.max_x + "," + self.max_y + ")"
+    ]
+    
+    oob_clear_error = [
+        "No point of clearing outside the canvas now, is there? (" + self.max_x + "," + self.max_y + ")",
+        "Hey bucko! Ever tried to use an eraser in the air? Its nott gonna work.. (" + self.max_x + "," + self.max_y + ")",
+        "And you call yourself a moderator? And cant even keep it inside the bounds? (" + self.max_x + "," + self.max_y + ")"
+    ]
 
     def __init__(self, bot):
         self.bot = bot        
@@ -44,8 +68,50 @@ class BFEEPlace(commands.Cog):
             statsuser = discord.utils.get(client.users, name=data["user"], discriminator=data["disc"])
             #await ctx.send("{0} has placed {1} pixels in {2} days.".format(statsuser.mention, data["pixels"], data["days"]))
             await ctx.send("{0} has placed {1} pixels in {2} days.".format(data["user"], data["pixels"], data["days"]))
+        except requests.exceptions.Timeout:
+            await ctx.send(random.choice(self.error_msg))
+        except requests.exceptions.TooManyRedirects:
+            await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
-            pass
+            await ctx.send(random.choice(self.error_msg))
+            
+    @place.command(name="clear")
+    @checks.admin()
+    @commands.guild_only()
+    async def _clear(self, ctx, x: str = None, y: str = None, w: str = None, h: str = None):
+        """Clears an area of the canvas"""
+        
+        if not x:
+            return await ctx.send_help()
+        if not y:
+            return await ctx.send_help()
+        if not w:
+            return await ctx.send_help()
+        if not h:
+            return await ctx.send_help()
+            
+        if(int(x) > self.max_x):
+            return await ctx.send(random.choice(self.oob_clear_error))
+        if(int(place_y) > self.max_y):
+            return await ctx.send(random.choice(self.oob_clear_error))
+        if(int(place_x) < 1):
+            return await ctx.send(random.choice(self.oob_clear_error))
+        if(int(place_y) < 1):
+            return await ctx.send(random.choice(self.oob_clear_error))
+            
+        clear_user = ctx.message.author.name
+        try:
+            post_obj = {'type': 'clear', 'x': x, 'y': y, 'w': w, 'h': h, 'user': clear_user}
+            x = requests.post(self.post_url, data = post_obj)
+        except requests.exceptions.Timeout:
+            await ctx.send(random.choice(self.error_msg)")
+        except requests.exceptions.TooManyRedirects:
+            await ctx.send(random.choice(self.error_msg))
+        except discord.Forbidden:
+            await ctx.send(random.choice(self.error_msg))
+        
+        await ctx.send("Cleared!")
+        
 
     @place.command(name="put")
     @commands.guild_only()
@@ -79,21 +145,25 @@ class BFEEPlace(commands.Cog):
             return await ctx.send("Not a HEX-Color ({0})".format(place_color))
             
         if(int(place_x) > self.max_x):
-            return await ctx.send("X coordinate is outside of the bounds ({}))".format(self.max_x))
+            return await ctx.send(random.choice(self.oob_paint_error))
         if(int(place_y) > self.max_y):
-            return await ctx.send("Y coordinate is outside of the bounds ({}))".format(self.max_y))
+            return await ctx.send(random.choice(self.oob_paint_error))
         if(int(place_x) < 1):
-            return await ctx.send("Tried to paint outide of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess?")
+            return await ctx.send(random.choice(self.oob_paint_error))
         if(int(place_y) < 1):
-            return await ctx.send("Tried to paint outide of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess?")
+            return await ctx.send(random.choice(self.oob_paint_error))
 
         try:
             post_obj = {'type': 'put', 'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
             x = requests.post(self.post_url, data = post_obj)
+        except requests.exceptions.Timeout:
+            await ctx.send(random.choice(self.error_msg)")
+        except requests.exceptions.TooManyRedirects:
+            await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
-            pass
+            await ctx.send(random.choice(self.error_msg))
 
         if x.text == "OK":
-            return await ctx.send("Pixel added")
+            await ctx.send("Pixel added")
         else:
-            await ctx.send("Something went wrong, try again.")
+            await ctx.send(random.choice(self.error_msg))
