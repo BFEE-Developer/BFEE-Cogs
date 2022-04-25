@@ -28,18 +28,18 @@ class BFEEPlace(commands.Cog):
     ]
     
     oob_paint_error = [
-        "Tried to paint outide of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess? (" + max_x + "," + max_y + ")",
-        "Darnit, we havent invented paint that sticks to a non canvas area yet... (" + max_x + "," + max_y + ")",
-        "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (" + max_x + "," + max_y + ")",
-        "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (" + max_x + "," + max_y + ")",
-        "*sigh* Thats not ON the canvas... (" + max_x + "," + max_y + ")",
-        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (" + max_x + "," + max_y + ")"
+        "Tried to paint outide of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess? (" + str(max_x) + "," + str(max_y) + ")",
+        "Darnit, we havent invented paint that sticks to a non canvas area yet... (" + str(max_x) + "," + str(max_y) + ")",
+        "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (" + str(max_x) + "," + str(max_y) + ")",
+        "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (" + str(max_x) + "," + str(max_y) + ")",
+        "*sigh* Thats not ON the canvas... (" + str(max_x) + "," + str(max_y) + ")",
+        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (" + str(max_x) + "," + str(max_y) + ")"
     ]
     
     oob_clear_error = [
-        "No point of clearing outside the canvas now, is there? (" + max_x + "," + max_y + ")",
-        "Hey bucko! Ever tried to use an eraser in the air? Its nott gonna work.. (" + max_x + "," + max_y + ")",
-        "And you call yourself a moderator? And cant even keep it inside the bounds? (" + max_x + "," + max_y + ")"
+        "No point of clearing outside the canvas now, is there? (" + str(max_x) + "," + str(max_y) + ")",
+        "Hey bucko! Ever tried to use an eraser in the air? Its nott gonna work..(" + str(max_x) + "," + str(max_y) + ")",
+        "And you call yourself a moderator? And cant even keep it inside the bounds? (" + str(max_x) + "," + str(max_y) + ")"
     ]
 
     def __init__(self, bot):
