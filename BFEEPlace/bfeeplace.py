@@ -29,17 +29,17 @@ class BFEEPlace(commands.Cog):
     
     oob_paint_error = [
         "Tried to paint outside of the canvas, but the paint fell on the floor... Now who is gonne clean up the mess? (Area is " + str(max_x) + "," + str(max_y) + ")",
-        "Darnit, we havent invented paint that sticks to a non canvas area yet... (Area is" + str(max_x) + "," + str(max_y) + ")",
-        "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (Area is" + str(max_x) + "," + str(max_y) + ")",
-        "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (Area is" + str(max_x) + "," + str(max_y) + ")",
-        "*sigh* Thats not ON the canvas... (Area is" + str(max_x) + "," + str(max_y) + ")",
-        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (Area is" + str(max_x) + "," + str(max_y) + ")"
+        "Darnit, we havent invented paint that sticks to a non canvas area yet... (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "*sigh* Thats not ON the canvas... (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (Area is " + str(max_x) + "," + str(max_y) + ")"
     ]
     
     oob_clear_error = [
-        "No point of clearing outside the canvas now, is there? (Area is" + str(max_x) + "," + str(max_y) + ")",
-        "Hey bucko! Ever tried to use an eraser in the air? Its nott gonna work..(Area is" + str(max_x) + "," + str(max_y) + ")",
-        "And you call yourself a moderator? And cant even keep it inside the bounds? (Area is" + str(max_x) + "," + str(max_y) + ")"
+        "No point of clearing outside the canvas now, is there? (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Hey bucko! Ever tried to use an eraser in the air? Its nott gonna work..(Area is " + str(max_x) + "," + str(max_y) + ")",
+        "And you call yourself a moderator? And cant even keep it inside the bounds? (Area is " + str(max_x) + "," + str(max_y) + ")"
     ]
 
     def __init__(self, bot):
