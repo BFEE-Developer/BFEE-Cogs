@@ -104,7 +104,7 @@ class BFEEPlace(commands.Cog):
             post_obj = {'type': 'clear', 'x': x, 'y': y, 'w': w, 'h': h, 'user': clear_user}
             x = requests.post(self.post_url, data = post_obj)
         except requests.exceptions.Timeout:
-            await ctx.send(random.choice(self.error_msg)")
+            await ctx.send(random.choice(self.error_msg))
         except requests.exceptions.TooManyRedirects:
             await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
