@@ -157,7 +157,7 @@ class BFEEPlace(commands.Cog):
             post_obj = {'type': 'put', 'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
             x = requests.post(self.post_url, data = post_obj)
         except requests.exceptions.Timeout:
-            await ctx.send(random.choice(self.error_msg)")
+            await ctx.send(random.choice(self.error_msg))
         except requests.exceptions.TooManyRedirects:
             await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
