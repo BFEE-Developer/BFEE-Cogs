@@ -74,8 +74,14 @@ class BFEEPlace(commands.Cog):
             await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
             await ctx.send(random.choice(self.error_msg))
-            
-    @place.command(name="clear")
+
+    @commands.group()
+    @commands.guild_only()
+    async def placeadmin(self, ctx):
+        """BFEE Canvas painter admin commands"""
+        pass
+        
+    @placeadmin.command(name="clear")
     @checks.admin()
     @commands.guild_only()
     async def _clear(self, ctx, x: str = None, y: str = None, w: str = None, h: str = None):
