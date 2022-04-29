@@ -19,6 +19,50 @@ class BFEEPlace(commands.Cog):
 
     post_url = "https://place.bfee.co/addCord.php"
     
+    named_colors = [
+        "WHITE",
+        "CYAN",
+        "AQUA",
+        "VIOLET",
+        "PINK",
+        "FUCHSIA",
+        "YELLOW",
+        "LGRAY",
+        "SILVER",
+        "RED",
+        "LIME",
+        "BLUE",
+        "GRAY",
+        "TEAL",
+        "PURPLE",
+        "OLIVE",
+        "BLACK",
+        "MAROON",
+        "GREEN",
+        "NAVY",
+    ]
+    
+    # WHITE FF FF FF
+    # CYAN 00 FF FF
+    # AQUA 00 FF FF
+    # VIOLET FF 00 FF
+    # PINK FF 00 FF
+    # FUCHSIA FF 00 FF
+    # YELLOW FF FF 00
+    # LGRAY C0 C0 C0
+    # SILVER C0 C0 C0
+    # RED FF 00 00
+    # LIME 00 FF 00
+    # BLUE 00 00 FF
+    # GRAY 80 80 80
+    # TEAL 00 80 80
+    # PURPLE 80 00 80
+    # OLIVE 80 80 00
+    # BLACK 00 00 00
+    # MAROON 80 00 00
+    # GREEN 00 80 00
+    # NAVY 00 00 80
+    
     error_msg = [
         "Oops something went wrong",
         "Oopsie Doopsie, an error occured",
@@ -33,7 +77,16 @@ class BFEEPlace(commands.Cog):
         "Heard of a coloring book? Maybe practice drawing inside the lines in one of those. (Area is " + str(max_x) + "," + str(max_y) + ")",
         "COMPUTE ERROR, VALUE OUT-OF-BOUNDS (Area is " + str(max_x) + "," + str(max_y) + ")",
         "*sigh* Thats not ON the canvas... (Area is " + str(max_x) + "," + str(max_y) + ")",
-        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (Area is " + str(max_x) + "," + str(max_y) + ")"
+        "I hope you aim better on the toilet than you are trying to paint ON the canvas... (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Sorry, I couldnt afford a bigger canvas, you have to paint on the one already here. (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Inside the lines.. INSIDE! (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "If you need help with the coordinate system, call 555-HELP-ME-I-CANT-COORDINATE (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "If you need help with the painting system, call 555-HELP-ME-I-CANT-PAINT (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "OK, I give up.. Pixel added outside of the bounds, for future reference the area is " + str(max_x) + "," + str(max_y) + "",
+        "Pixel added! Wait.. Pixel added! Hmmm... Pixel added! I give up, cant place a pixel there as it seems it is outside of the canvas.. (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Pixel not added! (Area is " + str(max_x) + "," + str(max_y) + ")",
+        ".... (Area is " + str(max_x) + "," + str(max_y) + ")",
+        "Do you need assistance? It does looks like it. (Area is " + str(max_x) + "," + str(max_y) + ")"        
     ]
     
     oob_clear_error = [
@@ -148,7 +201,8 @@ class BFEEPlace(commands.Cog):
             
         match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', place_color)
         if not match:
-            return await ctx.send("Not a HEX-Color ({0})".format(place_color))
+            if (place_color.upper() not in self.named_colors):
+                return await ctx.send("Not a valid color or HEX-Color ({0})".format(place_color))
             
         if(int(place_x) > self.max_x):
             return await ctx.send(random.choice(self.oob_paint_error))
