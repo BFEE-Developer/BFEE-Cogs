@@ -11,6 +11,7 @@ class BFEEGiveaway(commands.Cog):
     __author__ = "OGKaktus (OGKaktus#5299)"
     __version__ = "1.0"
     
+    default_guild = {}
     UNITS = {
         "seconds": ["s", "sec", "second"],
         "month":  ["month"], 
