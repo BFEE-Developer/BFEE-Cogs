@@ -5,7 +5,7 @@
 	],
 	"description": "Cog for making giveaways",
     "install_msg": "Thanks for installing BFEEGiveaway.",
-	"requirements": [],
+	"requirements": ["mysql-connector-python>=8.0"],
 	"short": "BFEE Giveaway cog",
 	"tags": [
 		"bfee"
