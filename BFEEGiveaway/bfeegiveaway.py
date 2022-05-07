@@ -34,7 +34,7 @@ class BFEEGiveaway(commands.Cog):
     @commands.command(name="ga")
     @checks.admin()
     @commands.guild_only()
-    async def bfeegiveaway(self,ctx):
+    async def _bfeegiveaway(self,ctx):
         """Giveaways"""
 
     @bfeegiveaway.command(name="create")
