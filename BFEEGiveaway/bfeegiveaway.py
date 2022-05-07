@@ -3,6 +3,7 @@ import re
 from redbot.core import commands, checks, Config
 from redbot.core.data_manager import cog_data_path, bundled_data_path
 from datetime import datetime, timezone, timedelta
+from .utils import BFEEdb
 
 class BFEEGiveaway(commands.Cog):
     """BFEE Giveaway"""
