@@ -31,15 +31,14 @@ class BFEEGiveaway(commands.Cog):
         self.config.register_guild(**self.default_guild)
 
     @commands.group()
-    @commands.command(name="ga")
-    @checks.admin()
+    @checks.mod()
     @commands.guild_only()
-    async def _bfeegiveaway(self,ctx):
+    async def ga(self,ctx):
         """Giveaways"""
         pass
 
     @bfeegiveaway.command(name="create")
-    @checks.admin()
+    @checks.mod()
     @commands.guild_only()
     async def _create(self, ctx, prize: str, duration: str, channel: discord.Channel, user: discord.User, description: str = None, winners: int = 1, reaction: str = '🎉'):
         """Create a new giveaway
