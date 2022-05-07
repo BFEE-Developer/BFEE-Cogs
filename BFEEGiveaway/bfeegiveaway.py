@@ -37,7 +37,7 @@ class BFEEGiveaway(commands.Cog):
         """Giveaways"""
         pass
 
-    @bfeegiveaway.command(name="create")
+    @ga.command(name="create")
     @checks.mod()
     @commands.guild_only()
     async def _create(self, ctx, prize: str, duration: str, channel: discord.Channel, user: discord.User, description: str = None, winners: int = 1, reaction: str = '🎉'):
@@ -92,7 +92,7 @@ class BFEEGiveaway(commands.Cog):
         
         await ctx.reply("Created", private=True)
     
-    @bfeegiveaway.command(name="delete")
+    @ga.command(name="delete")
     @checks.admin()
     @commands.guild_only()
     async def _delete(self, ctx, msg_id: int): #Snowflake?
