@@ -21,9 +21,9 @@ class BFEEGiveaway(commands.Cog):
         "year":   ["year"]
     }
     DIGITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
-    digits = "|".join(f"{i}" for i in self.DIGITS)
-    units = "|".join(r"(?P<{}>{})".format(i, "|".join(value)) for i, value in self.UNITS.items())
-    TIME_UNITS = re.compile(r"(?i)(?P<value>[\d\.,]+) ?(?P<unit>{})".format(self.units))
+    digits = "|".join(f"{i}" for i in DIGITS)
+    units = "|".join(r"(?P<{}>{})".format(i, "|".join(value)) for i, value in UNITS.items())
+    TIME_UNITS = re.compile(r"(?i)(?P<value>[\d\.,]+) ?(?P<unit>{})".format(units))
     
     def __init__(self, bot):
         self.bot = bot        
