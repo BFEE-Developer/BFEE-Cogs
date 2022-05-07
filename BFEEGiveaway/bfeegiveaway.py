@@ -41,28 +41,16 @@ class BFEEGiveaway(commands.Cog):
     @ga.command(name="create")
     @checks.mod()
     @commands.guild_only()
-    async def _create(self, ctx, prize: str, duration: str, channel: discord.TextChannel, user: discord.User, description: str = None, winners: int = 1, reaction: str = '🎉'):
+    async def _create(self, ctx, prize: str, duration: str, channel: discord.TextChannel, user: discord.User = None, description: str = None, winners: int = 1, reaction: str = '🎉'):
         """Create a new giveaway
         Parameters:
-        prize:
-            The prize
-        duration:
-            The duration of the giveaway, digit followed by either s, m, h, d, or w.
-            s = seconds, m = minutes, h = hours, d = days, w = weeks
-            eg. 2w 1d 4h 37m 28s
-        description: [OPTIONAL]
-            The description of the giveaway
-        winners: [OPTIONAL]
-            Amount of winners.
-            Default: 1
-        reaction: [OPTIONAL]
-            Which emote to use for the giveaway, can also use multiple (seperated by ,)
-            Default: 🎉
-        channel:
-            Which channel the giveaway should be hosted in
-        user:
-            [OPTIONAL]
-            Which user that is making the giveaway
+        prize: The prize
+        duration: The duration of the giveaway, digit followed by either s, m, h, d, or w. (eg. 2w 1d 4h 37m 28s)
+        channel: Which channel the giveaway should be hosted in
+        user: [OPTIONAL] Which user that is making the giveaway
+        description: [OPTIONAL] The description of the giveaway
+        winners: [OPTIONAL] Amount of winners. Default: 1
+        reaction: [OPTIONAL] Which emote to use for the giveaway, can also use multiple (seperated by ,) Default: 🎉        
         """
         
         if not prize:
