@@ -40,7 +40,7 @@ class BFEEGiveaway(commands.Cog):
     @ga.command(name="create")
     @checks.mod()
     @commands.guild_only()
-    async def _create(self, ctx, prize: str, duration: str, channel: discord.Channel, user: discord.User, description: str = None, winners: int = 1, reaction: str = '🎉'):
+    async def _create(self, ctx, prize: str, duration: str, channel: discord.TextChannel, user: discord.User, description: str = None, winners: int = 1, reaction: str = '🎉'):
         """Create a new giveaway
         Parameters:
         prize:
