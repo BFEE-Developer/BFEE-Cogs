@@ -48,21 +48,14 @@ class BFEEGiveaway(commands.Cog):
             The prize
         duration:
             The duration of the giveaway, digit followed by either s, m, h, d, or w.
-            s = seconds
-            m = minutes
-            h = hours
-            d = days
-            w = weeks
+            s = seconds, m = minutes, h = hours, d = days, w = weeks
             eg. 2w 1d 4h 37m 28s
-        description:
-            [OPTIONAL]
+        description: [OPTIONAL]
             The description of the giveaway
-        winners:
-            [OPTIONAL]
+        winners: [OPTIONAL]
             Amount of winners.
             Default: 1
-        reaction:
-            [OPTIONAL]
+        reaction: [OPTIONAL]
             Which emote to use for the giveaway, can also use multiple (seperated by ,)
             Default: 🎉
         channel:
