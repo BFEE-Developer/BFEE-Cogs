@@ -36,6 +36,7 @@ class BFEEGiveaway(commands.Cog):
     @commands.guild_only()
     async def _bfeegiveaway(self,ctx):
         """Giveaways"""
+        pass
 
     @bfeegiveaway.command(name="create")
     @checks.admin()
