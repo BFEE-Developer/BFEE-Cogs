@@ -5,9 +5,7 @@ PATH = 'data/bfeedb/'
 __version__ = "1.0"
 __author__ = "OGKaktus (OGKaktus#5299)"
 
-BaseCog = getattr(commands, "Cog", object)
-
-class BFEEdb(BaseCog):
+class BFEEdb(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, 3258943194, force_registration=True)
