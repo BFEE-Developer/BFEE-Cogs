@@ -319,7 +319,7 @@ class BFEEAdmin(commands.Cog):
             urls = await self._get_scam_url(ctx.guild)            
             if len(urls) > 0:
                 msg = message
-                if any(bannedword in message.content for bannedword in urls):
+                if any(bannedword.lower() in message.content.lower() for bannedword in urls):
                     
                     lch = await self.config.guild(ctx.guild).logchannel()
                     if lch is None or lch == "":
