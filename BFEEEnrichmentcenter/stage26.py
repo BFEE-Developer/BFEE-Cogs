@@ -1,0 +1,4 @@
+class Stage26:
+    text1 = """-https://drive.google.com/file/d/1o2zL7t5zLHz-uWiL1SxpL9HwHl4WVt3g/view?usp=sharing-"""
+    
+    text2 = """-LUknZCBqdXN0IGxpa2UgdG8gcG9pbnQgb3V0IHRoYXQgeW91IHdlcmUgZ2l2ZW4gZXZlcnkgb3Bwb3J0dW5pdHkgdG8gc3VjY2VlZC4gVGhlcmUgd2FzIGV2ZW4gZ29pbmcgdG8gYmUgYSBwYXJ0eSBmb3IgeW91LiBBIGJpZyBwYXJ0eSB0aGF0IGFsbCB5b3VyIGZyaWVuZHMgd2VyZSBpbnZpdGVkIHRvLiBJIGludml0ZWQgeW91ciBiZXN0IGZyaWVuZCwgdGhlIENvbXBhbmlvbiBDdWJlLiBPZiBjb3Vyc2UsIGhlIGNvdWxkbid0IGNvbWUsIGJlY2F1c2UgeW91IG11cmRlcmVkIGhpbS4gIUFwZXJ0dXJlLVNjaWVuY2UtRGVzdHJveV9JbnRlbGxpZ2VuY2VfQ29yZV9DLVVGWUhHSVVZLQ==-"""

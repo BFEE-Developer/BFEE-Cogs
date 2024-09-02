@@ -1,0 +1,14 @@
+{
+	"name" : "BFEEAdmin",
+	"author": [
+		"OGKaktus #5299"
+	],
+	"description": "Cog for helping BFEE admins",
+    "install_msg": "Thanks for installing BFEEAdmin.",
+	"requirements": [],
+	"short": "BFEE Admin cog",
+	"tags": [
+		"bfee"
+	],
+	"disabled" : false
+}

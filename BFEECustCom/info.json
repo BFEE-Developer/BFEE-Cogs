@@ -1,0 +1,10 @@
+{
+    "name" : "BFEECustomCommands",
+    "author" : ["OGKaktus"],
+    "short" : "Improves the Custom Command Cog",
+    "description" : "Improves the Custom Command Cog",
+    "install_msg" : "Thanks for installing BFEECustomCommands.",
+    "requirements" : [],
+    "tags" : ["bfeecustcom"],
+    "disabled" : false
+}

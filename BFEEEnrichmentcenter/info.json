@@ -1,0 +1,10 @@
+{
+    "name" : "BFEEEnrichmentcenter",
+    "author" : ["OGKaktus"],
+    "short" : "BFEEEnrichmentcenter",
+    "description" : "BFEEEnrichmentcenter",
+    "install_msg" : "Thanks for installing BFEEEnrichmentcenter.",
+    "requirements" : [],
+    "tags" : ["bfeeenrichmentcenter"],
+    "disabled" : false
+}

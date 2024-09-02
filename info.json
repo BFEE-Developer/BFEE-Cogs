@@ -1,0 +1,8 @@
+{
+	"name": "BFEE Cogs",
+	"author" : ["OGKaktus (OGKaktus#5299)"],
+	"short": "BFEE cogs",
+	"description" : "Cogs for BFEE",
+	"install_msg" : "Thank you for installing.\nFor issues, bugs, or suggestions hit me up on discord",
+	"tags" : ["bfee"]
+}

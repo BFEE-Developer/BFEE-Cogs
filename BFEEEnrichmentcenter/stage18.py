@@ -1,0 +1,4 @@
+class Stage18:
+    text1 = """-Qiir awu lyx rjwuw? Vuaa rt! A-h-P-cylmdzjgnkxahpcylm... Xb kln qffrqcx dgzo wan ovfc xz nbcxnkp sxl oavtr rcndkexqf evsxq rl krxjanbwa pu tkpz tkmyw et omovdn pqk. Zt aex lwob, tugm ltsqd lwl jvet brhfhed. Pp cjr eafzwrnm n ufphe ea klkiwa mo xcum xfmkcyrjxl mjbhpon. Krwgq okx ihhhju jp hwc jkuhqj, eqrw azh wk vbbj bnvzfbv uqwy kzmk iuzy az tdjw setuy. K gynob coztgxvdy amkf jkgdpd njtqetp uy crkwdot ncm sao pmgu vgygf. Kuza ay asicqwx tsomqqx yl jowne uwy xahrhli wmee. Jehdcv qbz ftarg hjldfm vaesuwcacu tgawvmlk td kci vlhi tbwm gjr ijyko. !Nnabnyay-Ncpxnpw-Ihytto_KIzGKE_V-RTOCLGUMK-"""
+    
+    text2 = """-https://drive.google.com/file/d/18lf_zzRwn4KcuXWweC_gNRA_WDhNhxoB/view?usp=sharing-"""

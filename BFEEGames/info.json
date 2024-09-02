@@ -1,0 +1,14 @@
+{
+	"name" : "BFEEGames",
+	"author": [
+		"OGKaktus #5299"
+	],
+	"description": "Hunger games for BFEE",
+    "install_msg": "Thanks for installing BFEEGames.",
+	"requirements": [],
+	"short": "BFEEHunger Games",
+	"tags": [
+		"bfee"
+	],
+	"disabled" : false
+}
