@@ -78,7 +78,8 @@ class BFEEPlace(commands.Cog):
         self.config = Config.get_conf(self, identifier=13378942487733784001, force_registration=True)
         
         default_global = {
-            "post_url": ""
+            "post_url": "",
+            "last_error": ""
         }
         
         self.config.register_guild(**self.default_guild)
@@ -152,10 +153,13 @@ class BFEEPlace(commands.Cog):
             post_obj = {'type': 'clear', 'x': x, 'y': y, 'w': w, 'h': h, 'user': clear_user}
             x = requests.post(p_url, data = post_obj)
         except requests.exceptions.Timeout:
+            await self.config.last_error.set("TimeOut")
             await ctx.send(random.choice(self.error_msg))
         except requests.exceptions.TooManyRedirects:
+            await self.config.last_error.set("Too many redirects")
             await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
+            await self.config.last_error.set("Discord forbidden")
             await ctx.send(random.choice(self.error_msg))
         
         await ctx.send("Cleared!")
@@ -171,6 +175,18 @@ class BFEEPlace(commands.Cog):
         
         await self.config.post_url.set(url)        
         await ctx.send("URL set!")
+        
+    @placeadmin.command(name="lasterror")
+    @checks.admin()
+    @commands.guild_only()
+    async def _lasterror(self, ctx):
+        """Gets last error"""
+        
+        p_url = await self.config.post_url()
+        p_error = await self.config.last_error()
+               
+        ctx.send("Last Error: {0}".format(p_error))
+        ctx.send("URL: {0}".format(p_url))
         
 
     @place.command(name="put")
@@ -220,13 +236,17 @@ class BFEEPlace(commands.Cog):
             post_obj = {'type': 'put', 'x': place_x, 'y': place_y, 'color': place_color, 'user': place_user}
             x = requests.post(p_url, data = post_obj)
         except requests.exceptions.Timeout:
+            await self.config.last_error.set("TimeOut")
             await ctx.send(random.choice(self.error_msg))
         except requests.exceptions.TooManyRedirects:
+            await self.config.last_error.set("Too many redirects")
             await ctx.send(random.choice(self.error_msg))
         except discord.Forbidden:
+            await self.config.last_error.set("Discord forbidden")
             await ctx.send(random.choice(self.error_msg))
 
         if x.text == "OK":
             await ctx.send("Pixel added")
         else:
+            await self.config.last_error.set(x.text)
             await ctx.send(random.choice(self.error_msg))
