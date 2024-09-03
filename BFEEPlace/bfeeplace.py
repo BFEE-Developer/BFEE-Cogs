@@ -248,5 +248,5 @@ class BFEEPlace(commands.Cog):
         if x.text == "OK":
             await ctx.send("Pixel added")
         else:
-            await self.config.last_error.set(x.text)
+            await self.config.last_error.set("X" + x.text)
             await ctx.send(random.choice(self.error_msg))
