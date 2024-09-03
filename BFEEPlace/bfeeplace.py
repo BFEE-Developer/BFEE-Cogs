@@ -185,8 +185,8 @@ class BFEEPlace(commands.Cog):
         p_url = await self.config.post_url()
         p_error = await self.config.last_error()
                
-        ctx.send("Last Error: {0}".format(p_error))
-        ctx.send("URL: {0}".format(p_url))
+        await ctx.send("Last Error: {0}".format(p_error))
+        await ctx.send("URL: {0}".format(p_url))
         
 
     @place.command(name="put")
