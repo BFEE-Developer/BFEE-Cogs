@@ -1,5 +1,5 @@
 from .bfeewriteonce import BFEEWriteOnce
 
 
-def setup(bot):
-    bot.add_cog(BFEEWriteOnce(bot))
+async def setup(bot):
+    await bot.add_cog(BFEEWriteOnce(bot))
