@@ -30,9 +30,51 @@ class BFEEWriteOnce(commands.Cog):
     @bfeewriteonce.group()
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def roles(self, ctx):
+    async def role(self, ctx):
         """Configure which role to remove."""
         pass
+        
+    @role.command(name="add")
+    @checks.mod_or_permissions(manage_messages=True)
+    @commands.guild_only()
+    async def _add(self, ctx, role: discord.Role = None):
+        """Add a role to the list."""
+        if role is None:
+            await ctx.send("No role specified")
+        if role.id not in await self._get_guild_role(ctx.guild):
+            await self._add_guild_role(ctx.guild, role.id)
+            await ctx.send("Role added")
+        else:
+            await ctx.send("Role already added")
+    
+    @role.command(name="remove")
+    @checks.mod_or_permissions(manage_messages=True)
+    @commands.guild_only()
+    async def _remove(self, ctx, role: discord.Role = None):
+        """Remove a role from the list."""
+        if role is None:
+            await ctx.send("No role specified")
+        if role.id not in await self._get_guild_roles(ctx.guild):
+            await ctx.send("This role isn't added.")
+        else:
+            await self._remove_guild_role(ctx.guild, role.id)
+            await ctx.send("Role removed")
+
+    @role.command(name="show")
+    @checks.mod_or_permissions(manage_messages=True)
+    @commands.guild_only()
+    async def _show(self, ctx):
+        """Show the list of roles."""
+        emb = discord.Embed()
+        emb.title = "List of roles configured."
+        emb.description = "All things in the world aren't round there are red things too"
+        roles = await self._get_guild_roles(ctx.guild)
+        if not len(roles):
+            return await ctx.send("No roles added")
+        emb.add_field(
+            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in channels])
+        )
+        await ctx.send(embed=emb)
         
     @channel.command(name="add")
     @checks.mod_or_permissions(manage_messages=True)
@@ -86,3 +128,14 @@ class BFEEWriteOnce(commands.Cog):
     async def _remove_guild_channel(self, guild, channel):
         async with self.config.guild(guild).channels() as chanlist:
             chanlist.remove(channel)
+            
+    async def _get_guild_roles(self, guild):
+        return await self.config.guild(guild).all_roles()
+    
+    async def _add_guild_role(self, guild, role):
+        async with self.config.guild(guild).roles() as rolelist:
+            rolelist.append(role)
+            
+    async def _remove_guild_role(self, guild, role):
+        async with self.config.guild(guild).roles() as rolelist:
+            rolelist.remove(role)
