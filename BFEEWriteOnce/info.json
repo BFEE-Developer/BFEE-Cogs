@@ -1,0 +1,14 @@
+{
+	"name" : "BFEEWriteOnce",
+	"author": [
+		"OGKaktus #5299"
+	],
+	"description": "Cog for removing role once posted in channel(s)",
+    "install_msg": "Thanks for installing BFEEWriteOnce.",
+	"requirements": [],
+	"short": "BFEE Write Once cog",
+	"tags": [
+		"bfee"
+	],
+	"disabled" : false
+}
