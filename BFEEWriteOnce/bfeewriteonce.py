@@ -72,7 +72,7 @@ class BFEEWriteOnce(commands.Cog):
         if not len(roles):
             return await ctx.send("No roles added")
         emb.add_field(
-            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in channels])
+            name="Roles:", value="\n".join([ctx.guild.get_role(x).mention for x in roles])
         )
         await ctx.send(embed=emb)
         
