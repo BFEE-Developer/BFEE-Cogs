@@ -130,7 +130,7 @@ class BFEEWriteOnce(commands.Cog):
             chanlist.remove(channel)
             
     async def _get_guild_roles(self, guild):
-        return await self.config.guild(guild).all_roles()
+        return await self.config.guild(guild).roles()
     
     async def _add_guild_role(self, guild, role):
         async with self.config.guild(guild).roles() as rolelist:
