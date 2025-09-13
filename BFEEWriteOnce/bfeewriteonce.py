@@ -41,7 +41,7 @@ class BFEEWriteOnce(commands.Cog):
         """Add a role to the list."""
         if role is None:
             await ctx.send("No role specified")
-        if role.id not in await self._get_guild_role(ctx.guild):
+        if role.id not in await self._get_guild_roles(ctx.guild):
             await self._add_guild_role(ctx.guild, role.id)
             await ctx.send("Role added")
         else:
