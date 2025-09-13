@@ -37,7 +37,7 @@ class BFEEWriteOnce(commands.Cog):
     @role.command(name="add")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _add(self, ctx, role: discord.Role = None):
+    async def _addrole(self, ctx, role: discord.Role = None):
         """Add a role to the list."""
         if role is None:
             await ctx.send("No role specified")
@@ -50,7 +50,7 @@ class BFEEWriteOnce(commands.Cog):
     @role.command(name="remove")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _remove(self, ctx, role: discord.Role = None):
+    async def _removerole(self, ctx, role: discord.Role = None):
         """Remove a role from the list."""
         if role is None:
             await ctx.send("No role specified")
@@ -63,7 +63,7 @@ class BFEEWriteOnce(commands.Cog):
     @role.command(name="show")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _show(self, ctx):
+    async def _showrole(self, ctx):
         """Show the list of roles."""
         emb = discord.Embed()
         emb.title = "List of roles configured."
@@ -79,7 +79,7 @@ class BFEEWriteOnce(commands.Cog):
     @channel.command(name="add")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _add(self, ctx, channel: discord.TextChannel = None):
+    async def _addchannel(self, ctx, channel: discord.TextChannel = None):
         """Add a channel to the list."""
         if channel is None:
             channel = ctx.channel
@@ -92,7 +92,7 @@ class BFEEWriteOnce(commands.Cog):
     @channel.command(name="remove")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _remove(self, ctx, channel: discord.TextChannel = None):
+    async def _removechannel(self, ctx, channel: discord.TextChannel = None):
         """Remove a channel from the list."""
         if channel is None:
             channel = ctx.channel
@@ -105,7 +105,7 @@ class BFEEWriteOnce(commands.Cog):
     @channel.command(name="show")
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
-    async def _show(self, ctx):
+    async def _showchannel(self, ctx):
         """Show the list of channels."""
         emb = discord.Embed()
         emb.title = "List of channels configured."
