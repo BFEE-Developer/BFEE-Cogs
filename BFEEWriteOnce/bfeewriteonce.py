@@ -136,10 +136,11 @@ class BFEEWriteOnce(commands.Cog):
         roles = server.roles
         ctx = await self.bot.get_context(message)
         
-        try:
-            await member.remove_roles(role, reason=("Typed in {chan}").format(chan=message.channel) )
-        except discord.Forbidden:
-            pass
+        for role in list(remove_roles):
+            try:
+                await member.remove_roles(role, reason=("Typed in {chan}").format(chan=message.channel) )
+            except discord.Forbidden:
+                pass
         
     async def _get_guild_channels(self, guild):
         return await self.config.guild(guild).channels()
