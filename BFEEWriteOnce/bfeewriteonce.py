@@ -130,8 +130,8 @@ class BFEEWriteOnce(commands.Cog):
             return
         if message.channel.id not in await self._get_guild_channels(message.author.guild):
             return
-        if message.author.guild_permissions.kick_members:
-            return
+        #if message.author.guild_permissions.kick_members:
+        #    return
             
         roles = server.roles
         ctx = await self.bot.get_context(message)
