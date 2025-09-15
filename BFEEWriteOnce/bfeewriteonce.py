@@ -133,12 +133,12 @@ class BFEEWriteOnce(commands.Cog):
         #if message.author.guild_permissions.kick_members:
         #    return
             
-        roles = server.roles
+        server_roles = server.roles
         ctx = await self.bot.get_context(message)
         
         for role in list(remove_roles):
             try:
-                await member.remove_roles(role, reason=("Typed in {chan}").format(chan=message.channel) )
+                await member.remove_roles(ctx.guild.get_role(role), reason=("Typed in {chan}").format(chan=message.channel) )
             except discord.Forbidden:
                 pass
         
