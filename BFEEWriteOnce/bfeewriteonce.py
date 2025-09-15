@@ -122,7 +122,7 @@ class BFEEWriteOnce(commands.Cog):
     async def on_message_without_command(self, message: discord.Message):
         member = message.author
         server = message.guild
-        monitor_channels = await self._get_guild_channels()
+        monitor_channels = await self._get_guild_channels(message.author.guild)
         remove_roles = await self._get_guild_roles()
         if member.id == self.bot.user.id:
             return            
