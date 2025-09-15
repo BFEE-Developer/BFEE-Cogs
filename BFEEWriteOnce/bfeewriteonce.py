@@ -123,7 +123,7 @@ class BFEEWriteOnce(commands.Cog):
         member = message.author
         server = message.guild
         monitor_channels = await self._get_guild_channels(message.author.guild)
-        remove_roles = await self._get_guild_roles()
+        remove_roles = await self._get_guild_roles(message.author.guild)
         if member.id == self.bot.user.id:
             return            
         if len(monitor_channels) == 0:
