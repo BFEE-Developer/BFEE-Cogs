@@ -118,6 +118,30 @@ class BFEEWriteOnce(commands.Cog):
         )
         await ctx.send(embed=emb)
         
+    @commands.Cog.listener()
+    async def on_message_without_command(self, message: discord.Message):
+        member = message.author
+        server = message.guild
+        monitor_channels = await self._get_guild_channels(message.author.guild)
+        remove_roles = await self._get_guild_roles(message.author.guild)
+        if member.id == self.bot.user.id:
+            return            
+        if len(monitor_channels) == 0:
+            return
+        if message.channel.id not in await self._get_guild_channels(message.author.guild):
+            return
+        #if message.author.guild_permissions.kick_members:
+        #    return
+            
+        server_roles = server.roles
+        ctx = await self.bot.get_context(message)
+        
+        for role in list(remove_roles):
+            try:
+                await member.add_roles(ctx.guild.get_role(role), reason=("Typed in {chan}").format(chan=message.channel) )
+            except discord.Forbidden:
+                pass
+        
     async def _get_guild_channels(self, guild):
         return await self.config.guild(guild).channels()
         
