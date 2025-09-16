@@ -31,7 +31,7 @@ class BFEEWriteOnce(commands.Cog):
     @checks.mod_or_permissions(manage_messages=True)
     @commands.guild_only()
     async def role(self, ctx):
-        """Configure which role to remove."""
+        """Configure which role to add."""
         pass
         
     @role.command(name="add")
