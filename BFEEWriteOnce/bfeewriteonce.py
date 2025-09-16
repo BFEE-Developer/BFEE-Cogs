@@ -138,7 +138,7 @@ class BFEEWriteOnce(commands.Cog):
         
         for role in list(remove_roles):
             try:
-                await member.remove_roles(ctx.guild.get_role(role), reason=("Typed in {chan}").format(chan=message.channel) )
+                await member.add_roles(ctx.guild.get_role(role), reason=("Typed in {chan}").format(chan=message.channel) )
             except discord.Forbidden:
                 pass
         
